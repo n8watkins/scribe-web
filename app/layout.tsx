@@ -11,8 +11,15 @@ export const metadata: Metadata = {
   title: TITLE,
   description: DESC,
   metadataBase: new URL(SITE_URL),
-  openGraph: { title: TITLE, description: DESC, type: "website" },
-  twitter: { card: "summary_large_image", title: TITLE, description: DESC },
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: TITLE,
+    description: DESC,
+    type: "website",
+    siteName: "Scribe",
+    url: "/",
+  },
+  twitter: { card: "summary", title: TITLE, description: DESC },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
