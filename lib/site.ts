@@ -1,3 +1,4 @@
+export const SITE_URL = "https://scribe.n8builds.dev";
 export const REPO = "n8watkins/scribe";
 export const GITHUB_URL = `https://github.com/${REPO}`;
 export const DOWNLOAD_URL = `${GITHUB_URL}/releases/latest`;

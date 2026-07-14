@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const TITLE = "Scribe - Private local dictation for Windows";
@@ -9,7 +10,7 @@ const DESC =
 export const metadata: Metadata = {
   title: TITLE,
   description: DESC,
-  metadataBase: new URL("https://scribe.n8builds.dev"),
+  metadataBase: new URL(SITE_URL),
   openGraph: { title: TITLE, description: DESC, type: "website" },
   twitter: { card: "summary_large_image", title: TITLE, description: DESC },
 };
