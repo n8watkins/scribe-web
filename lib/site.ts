@@ -11,7 +11,7 @@ export const FEATURES: Feature[] = [
   { icon: "📋", title: "Paste anywhere", body: "Ctrl+Alt+V drops your last transcript without consuming the keyboard." },
   { icon: "⌨️", title: "Rebindable hotkeys", body: "Push-to-talk (Ctrl+Win) or toggle (tilde). Bind the keys you want." },
   { icon: "🤖", title: "Local AI cleanup", body: "Connect LM Studio to clean up and organize transcripts while keeping the workflow local." },
-  { icon: "☁️", title: "Private GitHub backup", body: "Optionally sync transcripts and settings to a private repository you control." },
+  { icon: "☁️", title: "Private GitHub backup", body: "Optionally sync notes and transcripts to a private repository you control." },
   { icon: "📌", title: "Floating pill", body: "A tiny status pill shows when Scribe is listening, live and incremental." },
   { icon: "🆓", title: "Free and open", body: "No account, no subscription, and no telemetry. The source is available on GitHub." },
 ];
