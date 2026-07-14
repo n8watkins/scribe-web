@@ -1,5 +1,13 @@
 import Image from "next/image";
-import { FEATURES, STEPS, GITHUB_URL, DOWNLOAD_URL, N8BUILDS_URL } from "@/lib/site";
+import {
+  DOWNLOAD_URL,
+  FAQS,
+  FEATURES,
+  GITHUB_URL,
+  N8BUILDS_URL,
+  PRIVACY_POINTS,
+  STEPS,
+} from "@/lib/site";
 
 export function Nav() {
   return (
@@ -7,8 +15,13 @@ export function Nav() {
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-6 py-3.5">
         <Image src="/scribe-icon.png" alt="" width={28} height={28} />
         <span className="font-bold tracking-tight">Scribe</span>
-        <span className="ml-1 hidden text-sm text-faint sm:inline">· private local dictation</span>
-        <div className="ml-auto flex items-center gap-2">
+        <span className="ml-1 hidden text-sm text-faint lg:inline">· private local dictation</span>
+        <div className="ml-auto hidden items-center gap-5 text-sm text-mute md:flex">
+          <a href="#how" className="transition hover:text-ink">How it works</a>
+          <a href="#privacy" className="transition hover:text-ink">Privacy</a>
+          <a href="#faq" className="transition hover:text-ink">FAQ</a>
+        </div>
+        <div className="flex items-center gap-2 md:ml-2">
           <a href={GITHUB_URL} className="rounded-full border border-edge px-4 py-1.5 text-sm font-medium text-ink transition hover:border-cyan/60">⭐ Star</a>
           <a href={DOWNLOAD_URL} className="rounded-full bg-gradient-to-r from-cyan to-purple px-4 py-1.5 text-sm font-semibold text-bg transition hover:brightness-110">Download</a>
         </div>
@@ -60,6 +73,62 @@ export function HowItWorks() {
   );
 }
 
+export function Privacy() {
+  return (
+    <section id="privacy" className="border-y border-edge/60 bg-bg-2/40 scroll-mt-16">
+      <div className="mx-auto max-w-6xl px-6 py-20">
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan">Privacy, made concrete</p>
+          <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
+            Local means <span className="gradient-text">your PC does the work</span>
+          </h2>
+          <p className="mt-4 text-mute">
+            Scribe keeps the core dictation path short, visible, and under your control.
+          </p>
+        </div>
+
+        <ol aria-label="Scribe's local dictation data flow" className="mt-10 grid grid-cols-1 overflow-hidden rounded-2xl border border-edge bg-card sm:grid-cols-4">
+          {[
+            ["1", "Microphone", "Capture your speech"],
+            ["2", "Temporary audio", "Delete it after a successful result"],
+            ["3", "Local Whisper", "Transcribe on this PC"],
+            ["4", "Your cursor", "Insert the finished text"],
+          ].map(([number, title, body], index) => (
+            <li key={title} className="relative border-b border-edge p-5 last:border-b-0 sm:border-r sm:border-b-0 sm:last:border-r-0">
+              <div className="flex items-center gap-3">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cyan/10 font-mono text-sm font-bold text-cyan">{number}</span>
+                <span className="font-semibold text-ink">{title}</span>
+              </div>
+              <p className="mt-2 pl-11 text-sm text-mute">{body}</p>
+              {index < 3 && <span aria-hidden="true" className="absolute -right-2.5 top-1/2 z-10 hidden h-5 w-5 -translate-y-1/2 rotate-45 border-r border-t border-edge bg-card sm:block" />}
+            </li>
+          ))}
+        </ol>
+
+        <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+          {PRIVACY_POINTS.map((point) => (
+            <article key={point.title} className="rounded-2xl border border-edge bg-card p-6">
+              <span aria-hidden="true" className="text-2xl">{point.icon}</span>
+              <h3 className="mt-3 font-semibold text-ink">{point.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-mute">{point.body}</p>
+            </article>
+          ))}
+        </div>
+
+        <div className="mt-6 rounded-2xl border border-purple/30 bg-purple/5 p-6 sm:flex sm:items-start sm:gap-5">
+          <span aria-hidden="true" className="text-2xl">🌐</span>
+          <div className="mt-3 sm:mt-0">
+            <h3 className="font-semibold text-ink">What can use the network?</h3>
+            <p className="mt-1.5 text-sm leading-relaxed text-mute">
+              Model downloads you start, update checks, GitHub authorization and backup when enabled, and optional AI features pointed at the server URL you configure. Core transcription does not send audio or text to a Scribe cloud service.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 const VIDEOS: { src: string; label: string }[] = [
   { src: "/videos/Scribe-15a.mp4", label: "Talk. It types." },
   { src: "/videos/Scribe-30a.mp4", label: "Full tour" },
@@ -95,6 +164,31 @@ export function VideoShowcase() {
   );
 }
 
+export function FAQ() {
+  return (
+    <section id="faq" className="mx-auto max-w-4xl scroll-mt-16 px-6 py-20">
+      <div className="text-center">
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan">Straight answers</p>
+        <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Frequently asked questions</h2>
+        <p className="mx-auto mt-4 max-w-2xl text-mute">
+          The practical details about privacy, connectivity, storage, and installing Scribe.
+        </p>
+      </div>
+      <div className="mt-10 space-y-3">
+        {FAQS.map((item) => (
+          <details key={item.question} className="group rounded-2xl border border-edge bg-card open:border-cyan/40 open:bg-card-2">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 font-semibold text-ink marker:content-none">
+              {item.question}
+              <span aria-hidden="true" className="text-xl font-normal text-cyan transition-transform group-open:rotate-45">+</span>
+            </summary>
+            <p className="px-6 pb-6 pr-14 leading-relaxed text-mute">{item.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function CTA() {
   return (
     <section className="mx-auto max-w-4xl px-6 py-20 text-center">
@@ -118,6 +212,8 @@ export function Footer() {
           <span>Scribe - private local dictation</span>
         </div>
         <div className="flex items-center gap-5">
+          <a href="#privacy" className="transition hover:text-ink">Privacy</a>
+          <a href="#faq" className="transition hover:text-ink">FAQ</a>
           <a href={GITHUB_URL} className="transition hover:text-ink">GitHub</a>
           <a href={DOWNLOAD_URL} className="transition hover:text-ink">Download</a>
           <a href={N8BUILDS_URL} className="transition hover:text-cyan">built by n8builds ↗</a>

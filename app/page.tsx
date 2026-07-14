@@ -1,5 +1,5 @@
 import { Hero } from "@/components/Hero";
-import { Nav, Features, HowItWorks, VideoShowcase, CTA, Footer } from "@/components/Sections";
+import { CTA, FAQ, Features, Footer, HowItWorks, Nav, Privacy, VideoShowcase } from "@/components/Sections";
 import { getStarCount } from "@/lib/site";
 
 export default async function Home() {
@@ -11,7 +11,9 @@ export default async function Home() {
         <Hero stars={stars} />
         <Features />
         <HowItWorks />
+        <Privacy />
         <VideoShowcase />
+        <FAQ />
         <CTA />
       </main>
       <Footer />
