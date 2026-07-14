@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { DOWNLOAD_URL, GITHUB_URL } from "@/lib/site";
 
@@ -28,6 +29,12 @@ function TypeOut() {
   const [n, setN] = useState(0);
   const ref = useRef(0);
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      ref.current = PHRASE.length;
+      setN(PHRASE.length);
+      return;
+    }
+
     const id = setInterval(() => {
       ref.current = Math.min(PHRASE.length, ref.current + 1);
       setN(ref.current);
@@ -36,9 +43,14 @@ function TypeOut() {
     return () => clearInterval(id);
   }, []);
   return (
-    <span>
-      {PHRASE.slice(0, n)}
-      <span className="inline-block w-[2px] h-[1.1em] translate-y-[3px] bg-cyan animate-pulse" />
+    <span aria-label={PHRASE}>
+      <span aria-hidden="true" className="hidden motion-reduce:inline">
+        {PHRASE}
+      </span>
+      <span aria-hidden="true" className="motion-reduce:hidden">
+        {PHRASE.slice(0, n)}
+        <span className="inline-block w-[2px] h-[1.1em] translate-y-[3px] bg-cyan animate-pulse" />
+      </span>
     </span>
   );
 }
@@ -47,16 +59,15 @@ export function Hero({ stars }: { stars: number | null }) {
   return (
     <section className="relative mx-auto max-w-5xl px-6 pt-20 pb-16 text-center">
       <div className="flex justify-center mb-8">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/scribe-icon.png" alt="Scribe" width={88} height={88} className="drop-shadow-[0_8px_40px_rgba(34,211,238,0.35)]" />
+        <Image src="/scribe-icon.png" alt="Scribe" width={88} height={88} priority className="drop-shadow-[0_8px_40px_rgba(34,211,238,0.35)]" />
       </div>
 
       <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.02]">
         Talk. <span className="gradient-text">It types.</span>
       </h1>
       <p className="mt-5 text-lg sm:text-xl text-mute max-w-2xl mx-auto">
-        Local, free voice dictation for Windows. Hold a key, speak, release — the
-        text lands at your cursor. Your voice <span className="text-ink font-semibold">never leaves your PC</span>.
+        Private local dictation for Windows. Hold a key, speak, and release. The
+        text lands at your cursor, while your voice <span className="text-ink font-semibold">stays on your PC</span>.
       </p>
 
       {/* live dictation mock */}
@@ -68,7 +79,7 @@ export function Hero({ stars }: { stars: number | null }) {
             <span className="text-sm text-mute">Listening · local</span>
           </span>
           <span className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-green/40 bg-green/10 px-3 py-1.5 text-xs text-green">
-            🔒 offline
+            🔒 on-device
           </span>
         </div>
         <div className="font-mono text-base sm:text-lg text-ink min-h-[3.5em]">
@@ -93,7 +104,7 @@ export function Hero({ stars }: { stars: number | null }) {
           ↓ Download for Windows
         </a>
       </div>
-      <p className="mt-4 text-sm text-faint">Free &amp; open source · no account · no telemetry</p>
+      <p className="mt-4 text-sm text-faint">Free and open source · no account · no telemetry</p>
     </section>
   );
 }

@@ -1,13 +1,13 @@
+import Image from "next/image";
 import { FEATURES, STEPS, GITHUB_URL, DOWNLOAD_URL, N8BUILDS_URL } from "@/lib/site";
 
 export function Nav() {
   return (
     <nav className="sticky top-0 z-50 border-b border-edge/70 bg-bg/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-6 py-3.5">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/scribe-icon.png" alt="" width={28} height={28} />
+        <Image src="/scribe-icon.png" alt="" width={28} height={28} />
         <span className="font-bold tracking-tight">Scribe</span>
-        <span className="ml-1 hidden text-sm text-faint sm:inline">· local voice dictation</span>
+        <span className="ml-1 hidden text-sm text-faint sm:inline">· private local dictation</span>
         <div className="ml-auto flex items-center gap-2">
           <a href={GITHUB_URL} className="rounded-full border border-edge px-4 py-1.5 text-sm font-medium text-ink transition hover:border-cyan/60">⭐ Star</a>
           <a href={DOWNLOAD_URL} className="rounded-full bg-gradient-to-r from-cyan to-purple px-4 py-1.5 text-sm font-semibold text-bg transition hover:brightness-110">Download</a>
@@ -114,9 +114,8 @@ export function Footer() {
     <footer className="border-t border-edge/60">
       <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-10 text-sm text-faint sm:flex-row">
         <div className="flex items-center gap-2">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/scribe-icon.png" alt="" width={22} height={22} />
-          <span>Scribe — local, free voice dictation</span>
+          <Image src="/scribe-icon.png" alt="" width={22} height={22} />
+          <span>Scribe - private local dictation</span>
         </div>
         <div className="flex items-center gap-5">
           <a href={GITHUB_URL} className="transition hover:text-ink">GitHub</a>

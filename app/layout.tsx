@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-const TITLE = "Scribe — Local, free voice dictation for Windows";
+const TITLE = "Scribe - Private local dictation for Windows";
 const DESC =
-  "Hold a key, speak, and Scribe types it at your cursor. 100% local Whisper, " +
-  "your voice never leaves your PC. Free & open source.";
+  "Hold a key, speak, and Scribe types at your cursor. Local Whisper keeps " +
+  "your voice on your PC. Free, open source, and built for Windows.";
 
 export const metadata: Metadata = {
   title: TITLE,
