@@ -14,7 +14,7 @@ export const FEATURES: Feature[] = [
   { icon: "🧠", title: "Model picker", body: "Choose the Whisper model that fits your hardware. Favor speed, accuracy, or a balance of both." },
   { icon: "📋", title: "Paste anywhere", body: "Ctrl+Alt+V drops your last transcript without consuming the keyboard." },
   { icon: "⌨️", title: "Rebindable hotkeys", body: "Push-to-talk (Ctrl+Win) or toggle (tilde). Bind the keys you want." },
-  { icon: "🤖", title: "Local AI cleanup", body: "Connect LM Studio to clean up and organize transcripts while keeping the workflow local." },
+  { icon: "🤖", title: "Optional AI tools", body: "Use an OpenAI-compatible server for note analysis and selected-text transforms. The default points to LM Studio on your PC." },
   { icon: "☁️", title: "Private GitHub backup", body: "Optionally sync notes and transcripts to a private repository you control." },
   { icon: "📌", title: "Floating pill", body: "A tiny status pill shows when Scribe is listening, live and incremental." },
   { icon: "🆓", title: "Free and open", body: "No account, no subscription, and no telemetry. The source is available on GitHub." },
@@ -66,9 +66,9 @@ export const FAQS: FaqItem[] = [
       "GitHub backup is off by default. When you enable it, Scribe can save dictated notes as dated Markdown in a private repository you control, with a separate option to include every transcript. It does not upload microphone audio.",
   },
   {
-    question: "Do the AI cleanup tools stay local too?",
+    question: "How do the optional AI tools handle my text?",
     answer:
-      "They use the OpenAI-compatible server URL you choose, which defaults to a local LM Studio endpoint. Cleanup, selected-text transforms, and note analysis are optional and off by default. Core dictation does not need an LLM.",
+      "Note analysis and selected-text transforms send the relevant text to the OpenAI-compatible server URL you choose. It defaults to LM Studio on your PC, but a remote URL sends the text to that remote service. These tools are optional and off by default. Core dictation does not need an LLM.",
   },
   {
     question: "Do I need an account or subscription?",
