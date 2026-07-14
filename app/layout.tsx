@@ -9,7 +9,7 @@ const DESC =
 export const metadata: Metadata = {
   title: TITLE,
   description: DESC,
-  metadataBase: new URL("https://scribe-web.vercel.app"),
+  metadataBase: new URL("https://scribe-chi.vercel.app"),
   openGraph: { title: TITLE, description: DESC, type: "website" },
   twitter: { card: "summary_large_image", title: TITLE, description: DESC },
 };
