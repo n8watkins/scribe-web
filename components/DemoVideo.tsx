@@ -13,28 +13,39 @@ export function DemoVideo({
   poster,
   label,
   autoPlay = true,
+  zoom,
   className = "",
 }: {
   src: string;
   poster: string;
   label: string;
   autoPlay?: boolean;
+  /** Crops in on the middle of the recording (scale, and the point it scales from). */
+  zoom?: { scale: number; origin: string };
   className?: string;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [still, setStill] = useState(true);
+  // The zoom is on from the first paint (no jump once it hydrates) and comes
+  // off only when the video shows its controls, which it would crop.
+  const [unzoomed, setUnzoomed] = useState(false);
 
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     setStill(reduce || !autoPlay);
+    setUnzoomed(reduce || !autoPlay);
     if (reduce || !autoPlay) return;
     // Plays while on screen, pauses off it (no work for a video nobody sees).
     const io = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) video.play().catch(() => setStill(true));
-        else video.pause();
+        if (!entry.isIntersecting) return video.pause();
+        // Autoplay blocked: show the controls instead, unzoomed so none are cropped.
+        video.play().catch(() => {
+          setStill(true);
+          setUnzoomed(true);
+        });
       },
       { threshold: 0.25 }
     );
@@ -49,19 +60,24 @@ export function DemoVideo({
         <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
         <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
       </div>
-      <video
-        ref={ref}
-        className="aspect-video w-full bg-bg-2"
-        poster={poster}
-        muted
-        loop={!still}
-        playsInline
-        controls={still}
-        preload="none"
-        aria-label={label}
-      >
-        <source src={src} type="video/mp4" />
-      </video>
+      <div className="overflow-hidden">
+        <video
+          ref={ref}
+          className="aspect-video w-full bg-bg-2"
+          style={
+            zoom && !unzoomed ? { transform: `scale(${zoom.scale})`, transformOrigin: zoom.origin } : undefined
+          }
+          poster={poster}
+          muted
+          loop={!still}
+          playsInline
+          controls={still}
+          preload="none"
+          aria-label={label}
+        >
+          <source src={src} type="video/mp4" />
+        </video>
+      </div>
       <figcaption className="sr-only">{label}</figcaption>
     </figure>
   );

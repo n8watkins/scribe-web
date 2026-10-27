@@ -48,6 +48,14 @@ export function Faq({ items }: { items: FaqItem[] }) {
             >
               <div className="overflow-hidden" inert={!isOpen}>
                 <p className="px-6 pb-6 pr-14 leading-relaxed text-mute">{item.answer}</p>
+                {item.link && (
+                  <a
+                    href={item.link.href}
+                    className="mx-6 mb-6 inline-flex items-center gap-2 rounded-full border border-edge-strong bg-bg px-4 py-2 text-sm font-semibold text-ink transition hover:border-cyan/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+                  >
+                    {item.link.label} ↗
+                  </a>
+                )}
               </div>
             </div>
           </div>

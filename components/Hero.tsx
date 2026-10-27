@@ -53,6 +53,7 @@ export function Hero({ release, stars }: { release: Release; stars: number | nul
       <DemoVideo
         src="/videos/Scribe-15a.mp4"
         poster="/posters/scribe-15a.webp"
+        zoom={{ scale: 1.25, origin: "50% 70%" }}
         label="Scribe in 15 seconds: hold Ctrl + Win, talk, and the words appear at the cursor"
       />
     </section>

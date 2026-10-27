@@ -5,12 +5,35 @@ export const DOWNLOAD_URL = `${GITHUB_URL}/releases/latest`;
 export const N8BUILDS_URL = "https://n8builds.dev";
 export const KOFI_URL = "https://ko-fi.com/n8watkins";
 export const GITHUB_PROFILE_URL = "https://github.com/n8watkins";
+// A prefilled GitHub issue: the same "ask for it" link as Scribe's row on n8builds.dev.
+export const MAC_LINUX_REQUEST_URL = `${GITHUB_URL}/issues/new?title=${encodeURIComponent(
+  "Request: Scribe for macOS or Linux"
+)}&body=${encodeURIComponent(
+  "Which platform would you use Scribe on (macOS or Linux, and which version)?\n\nWhat would you use it for?"
+)}`;
 
-export type IconName = "lock" | "chip" | "clipboard" | "keyboard" | "pill" | "spark" | "history" | "shield";
+export type IconName =
+  | "lock"
+  | "chip"
+  | "clipboard"
+  | "keyboard"
+  | "pill"
+  | "spark"
+  | "history"
+  | "shield"
+  | "mic"
+  | "file"
+  | "chart"
+  | "refresh"
+  | "cloudDown"
+  | "github"
+  | "monitor"
+  | "globe";
 
 export type Feature = { icon: IconName; title: string; body: string };
 
-export type FaqItem = { question: string; answer: string };
+/** An answer can end with one link, shown as a button (the Mac and Linux request). */
+export type FaqItem = { question: string; answer: string; link?: { label: string; href: string } };
 
 /** The latest Windows release, read from GitHub at build time (hourly). */
 export type Release = { version: string; url: string; sizeMb: number; checksumsUrl: string };
@@ -55,7 +78,7 @@ export const FEATURES: Feature[] = [
   { icon: "pill", title: "See it listening", body: "A small pill sits on top of your screen and shows what it hears as you talk." },
   { icon: "clipboard", title: "Works in any app", body: "Email, Slack, Word, your code editor. Ctrl + Alt + V pastes your last one again." },
   { icon: "history", title: "Find what you said", body: "Everything you dictate is saved on your PC to search later. Or turn history off." },
-  { icon: "spark", title: "Extras if you want them", body: "AI tools for your notes and a GitHub backup. Both are off until you turn them on." },
+  { icon: "spark", title: "Extras if you want them", body: "A summary and action items for any note, from an AI on your PC, and a GitHub backup. Both are off until you turn them on." },
 ];
 
 export const FAQS: FaqItem[] = [
@@ -70,6 +93,16 @@ export const FAQS: FaqItem[] = [
       "Yes. Once you've downloaded a speech model, dictation works offline. Scribe only goes online to check for updates, to download a model you pick, and for the GitHub backup or AI tools if you turn them on.",
   },
   {
+    question: "Which speech models can I use?",
+    answer:
+      "OpenAI's Whisper models, run on your PC by whisper.cpp. Scribe starts with Small English (190 MB), a good balance of speed and accuracy. In the app you can switch to English-only Tiny, Base, Small or Medium (78 MB to 1.5 GB), the multilingual version of each, or Large v3 Turbo for the best accuracy (574 MB or 1.6 GB). Each one downloads once, from Hugging Face, and is checked against its known size.",
+  },
+  {
+    question: "How does Scribe update?",
+    answer:
+      "It checks Scribe's GitHub releases when it starts and every 6 hours. When there's a new version, it installs the signed update the next time you open Scribe, never in the middle of your work. Both are switches in About: \u201cAutomatically check for updates\u201d and \u201cInstall updates automatically\u201d.",
+  },
+  {
     question: "Where are my transcripts saved?",
     answer:
       "In a small database in Scribe's app folder on your PC. From the settings you can open that folder, clear your history, or stop saving it at all.",
@@ -82,7 +115,7 @@ export const FAQS: FaqItem[] = [
   {
     question: "What happens to my text with the AI tools?",
     answer:
-      "They're optional and off at first. When you use one, Scribe sends that text to the AI server you set. By default that's LM Studio running on your own PC; if you point it at an online service, the text goes there.",
+      "Nothing, unless you turn on \u201cAnalyze notes with a local LLM\u201d in Settings. Then each note gets an Analyze button: Scribe sends that one note's text to the AI server you set, which by default sums it up and lists any action items (you can change what it asks). Out of the box the server is LM Studio on your own PC, and Ollama works too. If you point it at an online service instead, the text goes there.",
   },
   {
     question: "Do I need an account?",
@@ -91,7 +124,9 @@ export const FAQS: FaqItem[] = [
   },
   {
     question: "Does it work on Mac or Linux?",
-    answer: "Not right now. Scribe is made for 64-bit Windows 10 and 11.",
+    answer:
+      "Not yet. Scribe is made for 64-bit Windows 10 and 11. If you'd use it on a Mac or on Linux, ask for it on GitHub: the requests decide where it goes next.",
+    link: { label: "Ask for Mac or Linux", href: MAC_LINUX_REQUEST_URL },
   },
   {
     question: "Why does Windows warn me when I install it?",

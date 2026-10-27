@@ -20,7 +20,7 @@ export default async function Home() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(app) }} />
-      <Nav release={release} />
+      <Nav release={release} stars={stars} />
       <main id="top">
         <Hero release={release} stars={stars} />
         <HowItWorks />

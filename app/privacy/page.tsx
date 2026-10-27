@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Footer, Nav } from "@/components/Sections";
-import { getRelease, GITHUB_URL } from "@/lib/site";
+import { getRelease, getStarCount, GITHUB_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Privacy policy - Scribe",
@@ -14,10 +14,10 @@ const UPDATED = "October 27, 2026";
 // The site's privacy policy, and a pointer to the app's own data handling
 // (the home page's "Private by design" section has the full detail).
 export default async function PrivacyPage() {
-  const release = await getRelease();
+  const [release, stars] = await Promise.all([getRelease(), getStarCount()]);
   return (
     <>
-      <Nav release={release} />
+      <Nav release={release} stars={stars} />
       <main id="top" className="mx-auto max-w-3xl px-6 py-16 sm:py-20">
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan">Scribe</p>
         <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">Privacy policy</h1>

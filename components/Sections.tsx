@@ -7,9 +7,10 @@ import {
   GITHUB_URL,
   KOFI_URL,
   N8BUILDS_URL,
+  type IconName,
   type Release,
 } from "@/lib/site";
-import { DownloadIcon, GitHubIcon, Icon, KofiIcon } from "@/components/Icons";
+import { DownloadIcon, GitHubIcon, Icon, KofiIcon, StarIcon } from "@/components/Icons";
 import { DemoVideo } from "@/components/DemoVideo";
 import { DictationDemo } from "@/components/DictationDemo";
 import { Faq } from "@/components/Faq";
@@ -21,7 +22,7 @@ function N8buildsMark({ label = "n8builds", className = "" }: { label?: string; 
   return (
     <a
       href={N8BUILDS_URL}
-      className={`group inline-flex items-center gap-2 rounded-lg text-sm text-mute transition hover:text-ink ${FOCUS} ${className}`}
+      className={`group inline-flex items-center gap-2 rounded-lg font-semibold leading-none tracking-tight text-mute transition hover:text-ink ${FOCUS} ${className}`}
     >
       <Image src="/n8builds-icon.png" alt="" width={24} height={24} className="rounded-md ring-1 ring-white/10 transition group-hover:ring-white/25" />
       <span>{label}</span>
@@ -29,44 +30,51 @@ function N8buildsMark({ label = "n8builds", className = "" }: { label?: string; 
   );
 }
 
-/** Ko-fi in its own colours: Ko-fi blue with the red cup, as on n8builds.dev. */
+/** Ko-fi on the page's own background, with Ko-fi's red cup. */
 function KofiButton({ className = "" }: { className?: string }) {
   return (
     <a
       href={KOFI_URL}
-      className={`inline-flex h-9 items-center gap-1.5 rounded-full bg-[#29abe0] px-3.5 text-sm font-semibold text-[#0b1324] transition hover:bg-[#4cc1ef] ${FOCUS} ${className}`}
+      className={`inline-flex h-9 items-center gap-1.5 rounded-full border border-edge bg-card px-3.5 text-sm font-semibold text-ink transition hover:border-[#ff5e5b]/60 ${FOCUS} ${className}`}
     >
-      <KofiIcon className="h-4 w-4 text-[#ff5e5b]" />
+      <KofiIcon className="h-5 w-5 text-[#ff5e5b]" />
       Ko-fi
     </a>
   );
 }
 
-export function Nav({ release }: { release: Release }) {
+/** Scribe's repo as a GitHub star button: the mark, "Star", and the count. */
+function StarButton({ stars }: { stars: number | null }) {
+  return (
+    <a
+      href={GITHUB_URL}
+      aria-label={stars == null ? "Star Scribe on GitHub" : `Star Scribe on GitHub (${stars} ${stars === 1 ? "star" : "stars"})`}
+      className={`inline-flex h-9 items-center overflow-hidden rounded-full border border-edge bg-card text-sm font-semibold text-ink transition hover:border-cyan/60 ${FOCUS}`}
+    >
+      <span className="flex items-center gap-1.5 px-3">
+        <GitHubIcon className="h-[1.125rem] w-[1.125rem]" />
+        Star
+      </span>
+      {stars != null && (
+        <span className="flex h-full items-center gap-1 border-l border-edge px-3 tabular-nums text-mute">
+          <StarIcon className="h-3.5 w-3.5 text-[#e3b341]" />
+          {stars.toLocaleString()}
+        </span>
+      )}
+    </a>
+  );
+}
+
+export function Nav({ release, stars }: { release: Release; stars: number | null }) {
   return (
     <header className="sticky top-0 z-50 border-b border-edge/70 bg-bg/85 backdrop-blur">
-      {/* A thin band: Scribe is one of the things I build on n8builds.dev */}
-      <div className="border-b border-edge/50 bg-bg-2/70">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-6 py-1.5 text-xs text-faint">
-          <span>
-            A free app from{" "}
-            <a href={N8BUILDS_URL} className="font-semibold text-mute underline-offset-2 transition hover:text-ink hover:underline">
-              n8builds.dev
-            </a>
-            , where I build in public
-          </span>
-          <a href={`${N8BUILDS_URL}/#lab`} className="hidden shrink-0 text-mute transition hover:text-ink sm:inline">
-            See everything I build ↗
-          </a>
-        </div>
-      </div>
       <nav aria-label="Primary" className="mx-auto flex max-w-6xl items-center gap-3 px-6 py-3">
         <Link href="/#top" className={`flex items-center gap-2.5 rounded-lg ${FOCUS}`}>
           <Image src="/scribe-icon.png" alt="" width={28} height={28} />
-          <span className="font-bold tracking-tight">Scribe</span>
+          <span className="font-bold leading-none tracking-tight">Scribe</span>
         </Link>
         <span aria-hidden="true" className="hidden h-5 w-px bg-edge sm:block" />
-        <span className="hidden sm:block">
+        <span className="hidden sm:flex">
           <N8buildsMark />
         </span>
         <div className="ml-auto hidden items-center gap-6 text-sm text-mute lg:flex">
@@ -78,13 +86,9 @@ export function Nav({ release }: { release: Release }) {
           <span className="hidden md:block">
             <KofiButton />
           </span>
-          <a
-            href={GITHUB_URL}
-            aria-label="Scribe's source on GitHub"
-            className={`flex h-9 w-9 items-center justify-center rounded-full border border-edge text-ink transition hover:border-cyan/60 ${FOCUS}`}
-          >
-            <GitHubIcon className="h-4 w-4" />
-          </a>
+          <span className="hidden sm:block">
+            <StarButton stars={stars} />
+          </span>
           <a
             href={release.url}
             className={`inline-flex h-9 items-center gap-1.5 rounded-full bg-gradient-to-r from-cyan to-purple px-4 text-sm font-semibold text-bg transition hover:brightness-110 ${FOCUS}`}
@@ -110,7 +114,7 @@ function SectionHead({ eyebrow, title, children }: { eyebrow: string; title: Rea
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="scroll-mt-28 border-y border-edge/60 bg-bg-2/40">
+    <section id="how-it-works" className="scroll-mt-20 border-y border-edge/60 bg-bg-2/40">
       <div className="mx-auto max-w-6xl px-6 py-20">
         <SectionHead eyebrow="How it works" title={<>Hold the key, talk, <span className="gradient-text">let go</span></>}>
           That&apos;s it. No window to switch to, nothing to copy or paste.
@@ -126,7 +130,7 @@ export function HowItWorks() {
 /** What else it does: one compact row each, the icon beside the words. */
 export function Features() {
   return (
-    <section id="features" className="mx-auto max-w-5xl scroll-mt-28 px-6 py-20">
+    <section id="features" className="mx-auto max-w-5xl scroll-mt-20 px-6 py-20">
       <SectionHead eyebrow="Features" title="The small things that make it nice to use" />
       <ul className="mt-10 grid grid-cols-1 gap-x-10 gap-y-2 md:grid-cols-2">
         {FEATURES.map((f) => (
@@ -144,20 +148,42 @@ export function Features() {
   );
 }
 
-// What leaves the PC, and when (from the app's source: update_check.rs,
-// model_manager.rs, github_backup.rs, note_analysis.rs).
-const ONLINE: { what: string; when: string }[] = [
-  { what: "Checks for updates", when: "when it starts" },
-  { what: "Downloads a speech model", when: "when you pick one" },
-  { what: "Backs up notes to GitHub", when: "if you turn it on" },
-  { what: "Sends text to an AI tool", when: "if you set one up" },
+// What leaves the PC, when, and how to stop it (from the app's source:
+// lib/updates.ts and App.tsx for updates, models.rs for the models,
+// github_backup.rs, and note_analysis.rs with its LM Studio default).
+const ONLINE: { icon: IconName; what: string; detail: string }[] = [
+  {
+    icon: "refresh",
+    what: "Update checks",
+    detail: "When it starts and every 6 hours. A switch in About turns them off.",
+  },
+  {
+    icon: "cloudDown",
+    what: "Speech model downloads",
+    detail: "Once per model you pick, from Hugging Face (78 MB to 1.6 GB).",
+  },
+  {
+    icon: "github",
+    what: "GitHub backup",
+    detail: "Only if you connect it: your notes, to a private repo you own.",
+  },
+  {
+    icon: "spark",
+    what: "AI note summaries",
+    detail: "Only if you turn them on. They use LM Studio on your PC unless you pick an online service.",
+  },
 ];
 
-const ON_PC = ["Your voice", "The speech model", "Your transcripts", "Your history and stats"];
+const ON_PC: { icon: IconName; what: string; detail: string }[] = [
+  { icon: "mic", what: "Your voice", detail: "Turned into text on your PC. The recording is deleted once the text is ready." },
+  { icon: "chip", what: "The speech model", detail: "Runs right on your PC, so dictation works offline." },
+  { icon: "file", what: "Your transcripts", detail: "Kept in a small database in Scribe's folder." },
+  { icon: "chart", what: "Your history and stats", detail: "Search them, clear them, or stop saving them." },
+];
 
 export function PrivateByDesign() {
   return (
-    <section id="private-by-design" className="scroll-mt-28 border-y border-edge/60 bg-bg-2/40">
+    <section id="private-by-design" className="scroll-mt-20 border-y border-edge/60 bg-bg-2/40">
       <div className="mx-auto max-w-5xl px-6 py-20">
         <SectionHead eyebrow="Private by design" title={<>Your voice stays <span className="gradient-text">on your PC</span></>}>
           Scribe has no server, so there&apos;s nowhere for your voice to go.
@@ -165,22 +191,28 @@ export function PrivateByDesign() {
 
         {/* Your PC on the left, the internet on the right, and what crosses */}
         <div className="mt-12 grid grid-cols-1 items-stretch gap-4 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
-          <div className="rounded-2xl border border-green/35 bg-green/[0.05] p-6">
+          <div className="flex flex-col rounded-2xl border border-green/35 bg-green/[0.05] p-6">
             <p className="flex items-center gap-2.5 font-semibold text-ink">
               <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-green/15 text-green">
-                <Icon name="chip" className="h-4 w-4" />
+                <Icon name="monitor" className="h-4 w-4" />
               </span>
               Your PC
             </p>
-            <ul className="mt-5 space-y-3">
+            <ul className="mt-5 space-y-4">
               {ON_PC.map((item) => (
-                <li key={item} className="flex items-center gap-3 text-ink">
-                  <Icon name="lock" className="h-4 w-4 shrink-0 text-green" />
-                  {item}
+                <li key={item.what} className="flex items-start gap-3">
+                  <Icon name={item.icon} className="mt-0.5 h-[1.125rem] w-[1.125rem] shrink-0 text-green" />
+                  <span>
+                    <span className="block text-ink">{item.what}</span>
+                    <span className="block text-sm leading-relaxed text-mute">{item.detail}</span>
+                  </span>
                 </li>
               ))}
             </ul>
-            <p className="mt-5 text-sm text-mute">Always here. Never uploaded.</p>
+            <p className="mt-auto flex items-center gap-2 pt-6 text-sm text-mute">
+              <Icon name="lock" className="h-4 w-4 text-green" />
+              Always here. Never uploaded.
+            </p>
           </div>
 
           <div aria-hidden="true" className="flex items-center justify-center">
@@ -191,21 +223,25 @@ export function PrivateByDesign() {
             </span>
           </div>
 
-          <div className="rounded-2xl border border-edge bg-card p-6">
+          <div className="flex flex-col rounded-2xl border border-edge bg-card p-6">
             <p className="flex items-center gap-2.5 font-semibold text-ink">
               <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan/10 text-cyan">
-                <Icon name="spark" className="h-4 w-4" />
+                <Icon name="globe" className="h-4 w-4" />
               </span>
               The internet
             </p>
-            <ul className="mt-5 space-y-3">
+            <ul className="mt-5 space-y-4">
               {ONLINE.map((c) => (
-                <li key={c.what} className="text-ink">
-                  {c.what} <span className="text-sm text-faint">({c.when})</span>
+                <li key={c.what} className="flex items-start gap-3">
+                  <Icon name={c.icon} className="mt-0.5 h-[1.125rem] w-[1.125rem] shrink-0 text-cyan" />
+                  <span>
+                    <span className="block text-ink">{c.what}</span>
+                    <span className="block text-sm leading-relaxed text-mute">{c.detail}</span>
+                  </span>
                 </li>
               ))}
             </ul>
-            <p className="mt-5 text-sm text-mute">That&apos;s the whole list. No account, no tracking.</p>
+            <p className="mt-auto pt-6 text-sm text-mute">That&apos;s the whole list. No account, no tracking.</p>
           </div>
         </div>
 
@@ -247,7 +283,7 @@ export function VideoShowcase() {
 
 export function FAQ() {
   return (
-    <section id="faq" className="mx-auto max-w-3xl scroll-mt-28 px-6 py-20">
+    <section id="faq" className="mx-auto max-w-3xl scroll-mt-20 px-6 py-20">
       <SectionHead eyebrow="FAQ" title="Questions" />
       <Faq items={FAQS} />
     </section>
@@ -265,7 +301,10 @@ export function CTA({ release }: { release: Release }) {
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <a href={release.url} className={`inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-cyan to-purple px-7 py-3.5 font-semibold text-bg transition hover:brightness-110 ${FOCUS}`}>
             <DownloadIcon />
-            Download v{release.version}<span className="hidden sm:inline">&nbsp;for Windows</span>
+            <span>
+              Download v{release.version}
+              <span className="hidden sm:inline"> for Windows</span>
+            </span>
           </a>
           <KofiButton className="h-[3.25rem] px-6 text-base" />
         </div>
@@ -339,21 +378,27 @@ export function Footer({ release }: { release: Release }) {
             <Image src="/scribe-icon.png" alt="" width={28} height={28} />
             <span className="font-bold tracking-tight text-ink">Scribe</span>
           </Link>
-          <p className="mt-3 max-w-xs text-sm text-mute">Free speech-to-text for Windows, made by Nathan Watkins.</p>
+          <p className="mt-3 max-w-xs text-sm text-mute">Free speech-to-text for Windows.</p>
           <div className="mt-4 flex items-center gap-2">
             <KofiButton />
             <a
               href={GITHUB_PROFILE_URL}
-              aria-label="Nathan on GitHub"
-              className={`flex h-9 w-9 items-center justify-center rounded-full border border-edge text-ink transition hover:border-cyan/60 ${FOCUS}`}
+              aria-label="My GitHub profile, n8watkins"
+              className={`inline-flex h-9 items-center gap-1.5 rounded-full border border-edge bg-card px-3.5 text-sm font-semibold text-ink transition hover:border-cyan/60 ${FOCUS}`}
             >
-              <GitHubIcon className="h-4 w-4" />
+              <GitHubIcon className="h-[1.125rem] w-[1.125rem]" />
+              n8watkins
             </a>
           </div>
         </div>
         {columns.map((c) => (
           <nav key={c.title} aria-label={c.title}>
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink">{c.title}</p>
+            <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-ink">
+              {c.title === "n8builds.dev" && (
+                <Image src="/n8builds-icon.png" alt="" width={16} height={16} className="rounded ring-1 ring-white/10" />
+              )}
+              {c.title}
+            </p>
             <ul className="mt-4 space-y-2.5">
               {c.links.map((l) => (
                 <li key={l.label}>
