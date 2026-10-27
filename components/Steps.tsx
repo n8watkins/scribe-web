@@ -86,10 +86,13 @@ const STEPS: { title: string; body: string; panel: React.ReactNode }[] = [
 
 export function Steps() {
   return (
-    <ol className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+    <ol data-reveal className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
       {STEPS.map((step, i) => (
-        <li key={step.title}>
-          <div aria-hidden="true" className="h-56 rounded-2xl border border-edge bg-card/70 p-3">
+        <li key={step.title} className="group">
+          <div
+            aria-hidden="true"
+            className="h-56 rounded-2xl border border-edge bg-card/70 p-3 transition duration-300 group-hover:-translate-y-1 group-hover:border-cyan/40"
+          >
             {step.panel}
           </div>
           <p className="mt-5 flex items-center gap-3 font-semibold text-ink">

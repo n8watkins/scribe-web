@@ -1,6 +1,7 @@
 import { Hero } from "@/components/Hero";
 import { CTA, FAQ, Footer, HowItWorks, Nav } from "@/components/Sections";
 import { LocalAI, Models, More, PrivacyFlow, Themes } from "@/components/Explainers";
+import { Reveal } from "@/components/Reveal";
 import { getRelease, getStarCount, SITE_URL } from "@/lib/site";
 
 export default async function Home() {
@@ -34,6 +35,7 @@ export default async function Home() {
         <CTA release={release} />
       </main>
       <Footer release={release} />
+      <Reveal />
     </>
   );
 }

@@ -69,57 +69,44 @@ export async function getRelease(): Promise<Release> {
   }
 }
 
+// Ordered by what people ask before installing; the page itself covers
+// models, updates and the AI tools, so they aren't repeated here.
 export const FAQS: FaqItem[] = [
   {
-    question: "Does Scribe send my voice to the cloud?",
+    question: "Is it really free?",
     answer:
-      "No. Your voice is recorded and turned into text on your PC with whisper.cpp, and the audio never leaves it. Each recording is kept on your PC so you can play it back in History, and is deleted with its transcript (after 30 days by default). Turn off \u201cSave raw audio clips\u201d to delete recordings as soon as the text is ready.",
+      "Yes. Scribe is free and open source (MIT), with no account, no subscription and no limits. If it helps you, you can buy me a coffee on Ko-fi.",
   },
   {
-    question: "Does it work without the internet?",
+    question: "Does my voice ever leave my PC?",
     answer:
-      "Yes. Once you've downloaded a speech model, dictation works offline. Scribe only goes online to check for updates, to download a model you pick, and for the GitHub backup or AI tools if you turn them on.",
-  },
-  {
-    question: "Which speech models can I use?",
-    answer:
-      "OpenAI's Whisper models, run on your PC by whisper.cpp. Scribe starts with Small English (190 MB), a good balance of speed and accuracy. In the app you can switch to English-only Tiny, Base, Small or Medium (78 MB to 1.5 GB), the multilingual version of each, or Large v3 Turbo for the best accuracy (574 MB or 1.6 GB). Each one downloads once, from Hugging Face, and is checked against its known size.",
-  },
-  {
-    question: "How does Scribe update?",
-    answer:
-      "It checks Scribe's GitHub releases when it starts, when you come back to it, and every 6 hours. When there's a new version, it installs the signed update the next time you open Scribe, never in the middle of your work. Both are switches in About: \u201cAutomatically check for updates\u201d and \u201cInstall updates automatically\u201d.",
-  },
-  {
-    question: "Where are my transcripts saved?",
-    answer:
-      "In a small database in Scribe's app folder on your PC. From the settings you can open that folder, clear your history, or stop saving it at all.",
-  },
-  {
-    question: "What does the GitHub backup upload?",
-    answer:
-      "It's off unless you turn it on. When it's on, Scribe saves your notes as Markdown files in a private GitHub repo that you own, and your transcripts too if you choose. It never uploads audio.",
-  },
-  {
-    question: "What happens to my text with the AI tools?",
-    answer:
-      "Nothing, unless you turn on \u201cAnalyze notes with a local LLM\u201d in Settings. Then each note gets an Analyze button: Scribe sends that one note's text to the AI server you set, which by default sums it up and lists any action items (you can change what it asks). Out of the box the server is LM Studio on your own PC, and Ollama works too. If you point it at an online service instead, the text goes there.",
-  },
-  {
-    question: "Do I need an account?",
-    answer:
-      "No. Scribe is free and open source, with no account and no subscription. You only need a GitHub account if you want the backup.",
-  },
-  {
-    question: "Want it on Mac or Linux?",
-    answer:
-      "Scribe is Windows-only for now (64-bit Windows 10 and 11). Open a request on GitHub and say which system you use. The requests decide what comes next.",
-    link: { label: "Open a request", href: MAC_LINUX_REQUEST_URL },
+      "No. Your voice is recorded and turned into text on your PC, and the audio never leaves it. Each recording is kept on your PC so you can play it back in History, and is deleted with its transcript (after 30 days by default). Turn off \u201cSave raw audio clips\u201d to delete recordings as soon as the text is ready.",
   },
   {
     question: "Why does Windows warn me when I install it?",
     answer:
-      "The installer isn't code-signed yet, so Windows SmartScreen may call it an unrecognized app. Only download Scribe from its GitHub page, where you can see the code and every release.",
+      "The installer isn't code-signed yet, so Windows SmartScreen may call it an unrecognized app. Choose \u201cMore info\u201d, then \u201cRun anyway\u201d. Only download Scribe from here or its GitHub page, where you can see the code and check every release.",
+  },
+  {
+    question: "What do I need to run it?",
+    answer:
+      "A 64-bit Windows 10 or 11 PC and a microphone. The default speech model is 190 MB. A graphics card makes the bigger models fast, but you don't need one.",
+  },
+  {
+    question: "Does it work offline?",
+    answer:
+      "Yes. Once a speech model is downloaded, dictation works with no internet at all.",
+  },
+  {
+    question: "Want it on Mac or Linux?",
+    answer:
+      "Scribe is Windows-only for now. Open a request on GitHub and say which system you use. The requests decide what comes next.",
+    link: { label: "Open a request", href: MAC_LINUX_REQUEST_URL },
+  },
+  {
+    question: "What does the GitHub backup upload?",
+    answer:
+      "Nothing until you connect it. Then Scribe saves your notes as Markdown files in a private GitHub repo that you own, and your transcripts too if you choose. It checks the repo is private, and it never uploads audio.",
   },
 ];
 

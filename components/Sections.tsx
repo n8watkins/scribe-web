@@ -101,7 +101,7 @@ export function Nav({ release, stars }: { release: Release; stars: number | null
 
 function SectionHead({ eyebrow, title, children }: { eyebrow: string; title: React.ReactNode; children?: React.ReactNode }) {
   return (
-    <div className="mx-auto max-w-2xl text-center">
+    <div data-reveal className="mx-auto max-w-2xl text-center">
       <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan">{eyebrow}</p>
       <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight sm:text-4xl">{title}</h2>
       {children && <p className="mt-4 text-pretty text-mute">{children}</p>}
@@ -132,7 +132,7 @@ export function FAQ() {
 export function CTA({ release }: { release: Release }) {
   return (
     <section className="mx-auto max-w-4xl px-6 pb-24 text-center">
-      <div className="rounded-3xl border border-edge bg-gradient-to-br from-cyan/10 via-card to-purple/10 px-6 py-12">
+      <div data-reveal className="rounded-3xl border border-edge bg-gradient-to-br from-cyan/10 via-card to-purple/10 px-6 py-12">
         <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
           Give it a try. <span className="gradient-text">It&apos;s free.</span>
         </h2>
