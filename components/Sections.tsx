@@ -112,7 +112,7 @@ function SectionHead({ eyebrow, title, children }: { eyebrow: string; title: Rea
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="sep-angle scroll-mt-20">
+    <section id="how-it-works" className="sep-glow sep-band scroll-mt-20">
       <div className="mx-auto max-w-6xl px-6 py-20">
         <SectionHead eyebrow="How it works" title={<>Hold, talk, <span className="gradient-text">let go</span></>}>
           Your words land where you&apos;re typing, a phrase at a time, while you&apos;re still talking.
@@ -128,16 +128,18 @@ export function HowItWorks() {
 
 export function FAQ() {
   return (
-    <section id="faq" className="sep-glow mx-auto max-w-3xl scroll-mt-20 px-6 py-20">
-      <SectionHead eyebrow="FAQ" title="Questions" />
-      <Faq items={FAQS} />
+    <section id="faq" className="sep-glow sep-band scroll-mt-20">
+      <div className="mx-auto max-w-3xl px-6 py-20">
+        <SectionHead eyebrow="FAQ" title="Questions" />
+        <Faq items={FAQS} />
+      </div>
     </section>
   );
 }
 
 export function CTA({ release }: { release: Release }) {
   return (
-    <section className="mx-auto max-w-4xl px-6 pb-24 text-center">
+    <section className="sep-glow mx-auto max-w-4xl px-6 py-24 text-center">
       <div data-reveal className="rounded-3xl border border-edge bg-gradient-to-br from-cyan/10 via-card to-purple/10 px-6 py-12">
         <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
           Give it a try. <span className="gradient-text">It&apos;s free.</span>

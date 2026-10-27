@@ -1,17 +1,14 @@
 import {
-  BookA,
   CalendarClock,
+  Check,
   ClipboardPaste,
   Combine,
   FileAudio,
-  FileDown,
   FolderGit2,
   Hand,
-  Languages,
   NotebookPen,
   Power,
   Scissors,
-  Timer,
   type LucideIcon,
 } from "lucide-react";
 import Image from "next/image";
@@ -82,7 +79,7 @@ const ONLINE: { icon: IconName; what: string; when: string }[] = [
 
 export function PrivacyFlow() {
   return (
-    <section id="private-by-design" className="sep-band sep-arc-green scroll-mt-20">
+    <section id="private-by-design" className="sep-glow scroll-mt-20">
       <div className="mx-auto max-w-5xl px-6 py-20">
         <Head eyebrow="Private by design" title={<>Your voice stays <span className="gradient-text">on your PC</span></>} />
 
@@ -135,58 +132,55 @@ export function PrivacyFlow() {
   );
 }
 
-/** The words beside an example: eyebrow, title, a line, then any extras. */
-function SplitCopy({ eyebrow, title, line, children }: { eyebrow: string; title: React.ReactNode; line: React.ReactNode; children?: React.ReactNode }) {
+// The two local-AI tools in one section: the intro once, four short points,
+// then an example for each that loops like a GIF while it's on screen (the
+// second starts later so the two never play in step).
+const AI_POINTS = ["Rewrite works in any app", "Runs on your PC", "LM Studio or Ollama", "Off until you turn it on"];
+
+function AICase({ id, title, line, children }: { id?: string; title: React.ReactNode; line: string; children: React.ReactNode }) {
   return (
-    <div data-reveal>
-      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan">{eyebrow}</p>
-      <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight sm:text-4xl">{title}</h2>
-      <p className="mt-4 text-pretty leading-relaxed text-mute">{line}</p>
+    <div id={id} data-reveal className="scroll-mt-24">
+      <h3 className="text-xl font-bold tracking-tight">{title}</h3>
+      <p className="mt-1.5 mb-4 text-pretty text-sm leading-relaxed text-mute">{line}</p>
       {children}
     </div>
   );
 }
 
-// Two sections, one per local-AI tool, each with an example that loops like a
-// GIF while it's on screen; the second starts later so the two never play in step.
 export function LocalAI() {
   return (
-    <>
-      <section id="local-ai" className="sep-glow mx-auto grid max-w-6xl scroll-mt-20 items-center gap-10 px-6 py-20 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-        <SplitCopy
+    <section id="local-ai" className="sep-glow sep-band scroll-mt-20">
+      <div className="mx-auto max-w-6xl px-6 py-16">
+        <Head
           eyebrow="Optional · local AI"
-          title={<>Rewrite anything <span className="gradient-text">you highlight</span></>}
-          line={
-            <>
-              Select text in any app, press <span className="font-mono text-ink">Ctrl + Alt + R</span> and say what to change. Scribe
-              swaps in the rewrite and puts your clipboard back.
-            </>
-          }
-        >
-          <div className="mt-6 rounded-xl border border-edge bg-card/60 p-4 text-sm leading-relaxed text-mute">
-            <p className="flex items-center gap-2 font-semibold text-ink">
-              <Icon name="chip" className="h-4 w-4 text-cyan" />
-              The AI runs on your PC too
-            </p>
-            <p className="mt-1.5">
-              Scribe hands the text to LM Studio or Ollama, free apps that run AI models on your own computer. Install one and turn
-              the AI tools on in Scribe; until then they stay off.
-            </p>
-          </div>
-        </SplitCopy>
-        <div data-reveal>
-          <AIExample
-            context="hey so i think we should push the launch, screenshots arent done and the copy needs another pass"
-            sayLabel="You say"
-            say="Make this clear and professional."
-            get="Let's move the launch date. The screenshots aren't finished, and the copy needs one more review."
-          />
-        </div>
-      </section>
-
-      <section id="note-summaries" className="sep-band sep-arc scroll-mt-20">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-20 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-          <div data-reveal className="md:order-first">
+          title={<>An AI on your PC that <span className="gradient-text">tidies your words</span></>}
+          line="Scribe hands the text to LM Studio or Ollama, free apps that run AI models on your own computer. Install one and turn the AI tools on in Scribe."
+        />
+        <ul data-reveal className="mx-auto mt-6 flex max-w-3xl flex-wrap justify-center gap-x-6 gap-y-2.5 text-sm text-ink">
+          {AI_POINTS.map((p) => (
+            <li key={p} className="flex items-center gap-2">
+              <Check className="h-4 w-4 shrink-0 text-green" aria-hidden="true" />
+              {p}
+            </li>
+          ))}
+        </ul>
+        <div className="mt-10 grid items-start gap-8 md:grid-cols-2">
+          <AICase
+            title={<>Rewrite anything <span className="gradient-text">you highlight</span></>}
+            line="Select text in any app, press Ctrl + Alt + R and say what to change. Scribe swaps in the rewrite and puts your clipboard back."
+          >
+            <AIExample
+              context="hey so i think we should push the launch, screenshots arent done and the copy needs another pass"
+              sayLabel="You say"
+              say="Make this clear and professional."
+              get="Let's move the launch date. The screenshots aren't finished, and the copy needs one more review."
+            />
+          </AICase>
+          <AICase
+            id="note-summaries"
+            title={<>Turn a ramble into <span className="gradient-text">a to-do list</span></>}
+            line="Dictate a quick note, then one click gives you a summary and its action items. You can change what it asks for."
+          >
             <AIExample
               sayLabel="Your note"
               say="ok so tomorrow I need to send Maya the new timeline, go over the homepage copy, and um book the dentist before Friday"
@@ -194,40 +188,36 @@ export function LocalAI() {
               bullets={["Send Maya the new timeline", "Review the homepage copy", "Book the dentist before Friday"]}
               startDelay={2400}
             />
-          </div>
-          <SplitCopy
-            eyebrow="Optional · local AI"
-            title={<>Turn a ramble into <span className="gradient-text">a to-do list</span></>}
-            line="Dictate a quick note, then one click gives you a summary and its action items. You can change what it asks for, and it uses the same AI on your PC."
-          />
+          </AICase>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }
 
-// The Whisper models in the app's catalog (models.rs), smallest first.
-const MODELS: { name: string; size: string; mb: number; langs: string; isDefault?: boolean }[] = [
-  { name: "Tiny", size: "78 MB", mb: 78, langs: "English or multilingual" },
-  { name: "Base", size: "148 MB", mb: 148, langs: "English or multilingual" },
-  { name: "Small, compressed", size: "190 MB", mb: 190, langs: "English", isDefault: true },
-  { name: "Small", size: "488 MB", mb: 488, langs: "English or multilingual" },
-  { name: "Large v3 Turbo, compressed", size: "574 MB", mb: 574, langs: "Multilingual" },
-  { name: "Medium", size: "1.5 GB", mb: 1534, langs: "English or multilingual" },
-  { name: "Large v3 Turbo", size: "1.6 GB", mb: 1625, langs: "Multilingual, most accurate" },
+// The Whisper models in the app's catalog (models.rs), smallest first, with the
+// sizes the app shows.
+const MODELS: { name: string; size: string; isDefault?: boolean }[] = [
+  { name: "Tiny", size: "75 MiB" },
+  { name: "Base", size: "142 MiB" },
+  { name: "Small, compressed", size: "181 MiB", isDefault: true },
+  { name: "Small", size: "466 MiB" },
+  { name: "Large v3 Turbo, compressed", size: "547 MiB" },
+  { name: "Medium", size: "1.5 GiB" },
+  { name: "Large v3 Turbo", size: "1.6 GiB" },
 ];
 
 export function Models() {
   return (
     <section id="models" className="sep-glow scroll-mt-20">
-      <div className="mx-auto max-w-5xl px-6 py-20">
+      <div className="mx-auto max-w-4xl px-6 py-16">
         <Head
           eyebrow="Models"
           title="Pick the model that fits your PC"
-          line="Smaller is faster; bigger is more accurate. Each download is hash-checked, and Scribe uses your graphics card when it can."
+          line="Each download is hash-checked, and Scribe uses your graphics card when it can."
         />
         {/* Whose models they are, and what runs them */}
-        <div data-reveal className="mx-auto mt-8 flex max-w-3xl flex-wrap items-center justify-center gap-3 text-sm">
+        <div data-reveal className="mx-auto mt-6 flex flex-wrap items-center justify-center gap-3 text-sm">
           <span className="inline-flex items-center gap-2.5 rounded-full border border-edge-strong bg-card px-4 py-2 font-semibold text-ink">
             <span className="flex h-6 w-6 items-center justify-center rounded-md bg-white text-black">
               <OpenAIIcon className="h-4 w-4" />
@@ -243,37 +233,30 @@ export function Models() {
             whisper.cpp
           </span>
         </div>
-        <div data-reveal className="mx-auto mt-8 max-w-3xl rounded-2xl border border-edge bg-card/60 p-5 sm:p-6">
-          <div className="flex justify-between text-xs font-semibold uppercase tracking-wider text-faint">
-            <span>← Faster</span>
-            <span>More accurate →</span>
-          </div>
-          <ul className="mt-4 space-y-3">
+        <div data-reveal className="mx-auto mt-6 max-w-3xl">
+          <ul className="flex flex-wrap justify-center gap-2">
             {MODELS.map((m) => (
               <li
                 key={m.name}
-                className="-mx-2 grid grid-cols-[minmax(0,9.5rem)_minmax(0,1fr)] items-center gap-3 rounded-lg px-2 py-1 transition hover:bg-white/[0.03] sm:grid-cols-[minmax(0,13rem)_minmax(0,1fr)]"
+                className={`rounded-full border px-3.5 py-1.5 text-sm ${
+                  m.isDefault ? "border-cyan/50 bg-cyan/10 text-ink" : "border-edge bg-card/70 text-mute"
+                }`}
               >
-                <span className="text-sm">
-                  <span className="block font-semibold text-ink">{m.name}</span>
-                  <span className="block text-xs text-faint">{m.langs}</span>
-                </span>
-                <span className="flex items-center gap-3">
-                  <span
-                    className={`block h-2.5 rounded-full ${m.isDefault ? "bg-gradient-to-r from-cyan to-purple" : "bg-edge-strong"}`}
-                    style={{ width: `${Math.max(4, (m.mb / 1625) * 100) * 0.82}%` }}
-                  />
-                  <span className="shrink-0 text-xs tabular-nums text-mute">{m.size}</span>
-                  {m.isDefault && (
-                    <span className="shrink-0 rounded-full bg-cyan/15 px-2 py-0.5 text-[0.7rem] font-semibold text-cyan">Starts here</span>
-                  )}
-                </span>
+                <span className="font-semibold text-ink">{m.name}</span>
+                <span className="ml-2 tabular-nums text-faint">{m.size}</span>
+                {m.isDefault && <span className="ml-2 text-xs font-semibold text-cyan">Starts here</span>}
               </li>
             ))}
           </ul>
+          <div className="mt-4 flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-faint" aria-hidden="true">
+            <span>Faster</span>
+            <span className="h-px flex-1 bg-gradient-to-r from-cyan/60 to-purple/60" />
+            <span>More accurate</span>
+          </div>
+          <p className="sr-only">The models run from faster to more accurate in the order listed.</p>
         </div>
         <p className="mt-6 text-center text-sm text-mute">
-          29 languages, or let it detect yours. Any of them can come out as English text.
+          Most come in English-only and multilingual builds. 29 languages, or let it detect yours; any of them can come out as English text.
         </p>
       </div>
     </section>
@@ -282,9 +265,9 @@ export function Models() {
 
 export function Themes() {
   return (
-    <section id="themes" className="sep-band sep-arc scroll-mt-20">
-      <div className="mx-auto max-w-5xl px-6 py-20">
-        <Head eyebrow="Make it yours" title={<>Your colours, <span className="gradient-text">your Scribe</span></>} line="Six themes built in, including a light one. Try them here." />
+    <section id="themes" className="sep-glow sep-band scroll-mt-20">
+      <div className="mx-auto max-w-5xl px-6 py-16">
+        <Head eyebrow="Make it yours" title={<>Your colours, <span className="gradient-text">your Scribe</span></>} line="Six themes built in, including a light one. Watch a tour of the app, or pick a theme to try." />
         <div data-reveal className="mt-10">
           <ThemePreview />
         </div>
@@ -363,18 +346,14 @@ const HIGHLIGHTS: { title: string; line: string; visual: React.ReactNode }[] = [
 
 // The rest, short and in one list: one icon each (lucide, the app's own set).
 const ALSO: { Icon: LucideIcon; text: string }[] = [
-  { Icon: Hand, text: "Hands-free on the ~ key" },
-  { Icon: Timer, text: "Stops after a minute of silence" },
+  { Icon: Hand, text: "Hands-free on the ~ key, stopping after a minute of silence" },
   { Icon: ClipboardPaste, text: "Ctrl + Alt + V pastes the last one" },
   { Icon: Scissors, text: "Leaves out \u201cum\u201d and \u201cuh\u201d if you like" },
-  { Icon: Languages, text: "29 languages, or into English" },
   { Icon: FileAudio, text: "Audio and video files into text" },
-  { Icon: Combine, text: "Combine entries, open in your editor" },
+  { Icon: Combine, text: "Combine entries, or open one in your editor" },
   { Icon: CalendarClock, text: "Keep history 30 days, forever, or not at all" },
-  { Icon: FolderGit2, text: "Backup to a private GitHub repo" },
-  { Icon: FileDown, text: "Export Markdown, CSV or JSON" },
+  { Icon: FolderGit2, text: "Back up to a private GitHub repo, or export Markdown, CSV or JSON" },
   { Icon: Power, text: "Lives in the tray, starts with Windows" },
-  { Icon: BookA, text: "A word list for names and jargon" },
 ];
 
 export function More() {
@@ -396,15 +375,17 @@ export function More() {
       </section>
 
       <section aria-labelledby="also-title" className="scroll-mt-20">
-        <div className="mx-auto max-w-5xl px-6 pt-4 pb-20">
+        <div className="mx-auto max-w-4xl px-6 pt-6 pb-24">
           <h3 id="also-title" className="text-center text-sm font-semibold uppercase tracking-[0.2em] text-faint">
             Also in the box
           </h3>
-          <ul data-reveal className="mt-8 grid grid-cols-1 gap-x-10 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+          <ul data-reveal className="mt-10 grid grid-cols-1 gap-x-14 gap-y-7 sm:grid-cols-2">
             {ALSO.map(({ Icon: ItemIcon, text }) => (
-              <li key={text} className="flex items-center gap-3 text-sm text-mute">
-                <ItemIcon className="h-4 w-4 shrink-0 text-cyan" aria-hidden="true" />
-                {text}
+              <li key={text} className="flex items-start gap-4 leading-relaxed text-mute">
+                <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-cyan/10 text-cyan">
+                  <ItemIcon className="h-4 w-4" aria-hidden="true" />
+                </span>
+                <span className="pt-1">{text}</span>
               </li>
             ))}
           </ul>
