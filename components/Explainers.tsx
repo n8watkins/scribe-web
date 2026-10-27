@@ -58,7 +58,7 @@ function Node({ icon, title, sub, delay }: { icon: IconName; title: string; sub:
 // The only things that go online, each with when it happens.
 const ONLINE: { icon: IconName; what: string; when: string }[] = [
   { icon: "refresh", what: "Update checks", when: "At start, when you come back to it, and every 6 hours. Can be turned off." },
-  { icon: "cloudDown", what: "Model download", when: "Once, when you pick a model." },
+  { icon: "cloudDown", what: "Model download", when: "Once, when you pick a model, and checked against its known SHA-256 hash." },
   { icon: "github", what: "GitHub backup", when: "Off until you connect it." },
   { icon: "spark", what: "Online AI", when: "Only if you point the AI tools at one." },
 ];
@@ -176,7 +176,7 @@ export function Models() {
         <Head
           eyebrow="Models"
           title="Pick the model that fits your PC"
-          line="All of them are OpenAI's Whisper, running on your PC. Smaller is faster; bigger is more accurate. Scribe uses your graphics card when it can."
+          line="All of them are OpenAI's Whisper, running on your PC. Smaller is faster; bigger is more accurate. Each download is hash-checked, and Scribe uses your graphics card when it can."
         />
         <div data-reveal className="mx-auto mt-12 max-w-3xl rounded-2xl border border-edge bg-card/60 p-5 sm:p-6">
           <div className="flex justify-between text-xs font-semibold uppercase tracking-wider text-faint">
