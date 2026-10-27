@@ -33,7 +33,7 @@ const STEPS = [
   { title: "Hold Ctrl + Win", body: "Scribe starts recording to a temporary file on your PC." },
   { title: "Talk", body: "whisper.cpp turns each phrase into text while you're still talking." },
   { title: "Let go", body: "The last phrase finishes, so there's nothing to wait for." },
-  { title: "It types", body: "The words go wherever your cursor is. The recording is deleted." },
+  { title: "It types", body: "The words go wherever your cursor is. The recording stays on your PC." },
 ];
 
 const clamp = (v: number) => Math.min(1, Math.max(0, v));

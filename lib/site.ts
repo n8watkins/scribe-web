@@ -71,21 +71,68 @@ export async function getRelease(): Promise<Release> {
   }
 }
 
-// Six things worth knowing before you install, said plainly.
+// The six things that matter most, said plainly (checked against the app's
+// source; see docs/scribe-review-and-videos.md for the full review to come).
 export const FEATURES: Feature[] = [
-  { icon: "chip", title: "Fast", body: "The speech model stays loaded, so your text is there the moment you let go of the key." },
-  { icon: "keyboard", title: "Your keys", body: "Hold Ctrl + Win to talk, or tap ~ to talk hands-free. Change either one." },
-  { icon: "pill", title: "See it listening", body: "A small pill sits on top of your screen and shows what it hears as you talk." },
-  { icon: "clipboard", title: "Works in any app", body: "Email, Slack, Word, your code editor. Ctrl + Alt + V pastes your last one again." },
-  { icon: "history", title: "Find what you said", body: "Everything you dictate is saved on your PC to search later. Or turn history off." },
-  { icon: "spark", title: "Extras if you want them", body: "A summary and action items for any note, from an AI on your PC, and a GitHub backup. Both are off until you turn them on." },
+  { icon: "keyboard", title: "Works in any app", body: "Hold Ctrl + Win, talk, let go, and the text lands at your cursor. Your clipboard is left as it was." },
+  { icon: "pill", title: "Text while you talk", body: "Phrases turn into text as you speak, so the words are there the moment you let go." },
+  { icon: "file", title: "Quick notes", body: "Hold the ~ key and tap Q to dictate a note. It is saved to your Notes instead of pasted." },
+  { icon: "spark", title: "Rewrite anything", body: "Highlight text in any app, press Ctrl + Alt + R and say what to change. A local AI rewrites it in place." },
+  { icon: "globe", title: "Your language", body: "Pick from 29 languages or let it detect yours, and turn any of them into English text." },
+  { icon: "history", title: "Everything you said", body: "Search it, filter it by date, play it back, and see your stats. All on your PC." },
+];
+
+/** Everything else it does, grouped, one short line each. */
+export const EXTRAS: { group: string; items: string[] }[] = [
+  {
+    group: "Dictation",
+    items: [
+      "Hands-free mode on the ~ key",
+      "Every hotkey can be changed",
+      "Stops by itself after a minute of silence",
+      "Ctrl + Alt + V pastes your last one again",
+      "A floating pill you can move and recolour",
+    ],
+  },
+  {
+    group: "Models and speed",
+    items: [
+      "11 Whisper models, from 78 MB to 1.6 GB",
+      "Runs on your graphics card, or the CPU",
+      "Transcribe audio and video files too",
+    ],
+  },
+  {
+    group: "Cleaner text",
+    items: [
+      "A dictionary for names and jargon",
+      "Replacements: say \u201cmy email\u201d, get your address",
+      "Leave out \u201cum\u201d and \u201cuh\u201d if you like",
+    ],
+  },
+  {
+    group: "History and notes",
+    items: [
+      "Combine entries, or open them in your editor",
+      "Keep them 30 days, forever, or not at all",
+      "AI summaries and action items for notes",
+    ],
+  },
+  {
+    group: "Backup and export",
+    items: ["Back up to a private GitHub repo", "Export to Markdown, CSV or JSON", "Restore from an export"],
+  },
+  {
+    group: "Look and feel",
+    items: ["Seven themes, a light one, or your own colours", "Lives in the tray, out of your way", "Starts with Windows if you want"],
+  },
 ];
 
 export const FAQS: FaqItem[] = [
   {
     question: "Does Scribe send my voice to the cloud?",
     answer:
-      "No. Your voice is recorded and turned into text on your PC with whisper.cpp. The recording is deleted as soon as the text is ready. If something goes wrong, Scribe keeps the last 20 recordings on your PC so you can try them again.",
+      "No. Your voice is recorded and turned into text on your PC with whisper.cpp, and the audio never leaves it. Each recording is kept on your PC so you can play it back in History, and is deleted with its transcript (after 30 days by default). Turn off \u201cSave raw audio clips\u201d to delete recordings as soon as the text is ready.",
   },
   {
     question: "Does it work without the internet?",
@@ -100,7 +147,7 @@ export const FAQS: FaqItem[] = [
   {
     question: "How does Scribe update?",
     answer:
-      "It checks Scribe's GitHub releases when it starts and every 6 hours. When there's a new version, it installs the signed update the next time you open Scribe, never in the middle of your work. Both are switches in About: \u201cAutomatically check for updates\u201d and \u201cInstall updates automatically\u201d.",
+      "It checks Scribe's GitHub releases when it starts, when you come back to it, and every 6 hours. When there's a new version, it installs the signed update the next time you open Scribe, never in the middle of your work. Both are switches in About: \u201cAutomatically check for updates\u201d and \u201cInstall updates automatically\u201d.",
   },
   {
     question: "Where are my transcripts saved?",

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import {
+  EXTRAS,
   FAQS,
   FEATURES,
   GITHUB_PROFILE_URL,
@@ -127,11 +128,13 @@ export function HowItWorks() {
   );
 }
 
-/** What else it does: one compact row each, the icon beside the words. */
+/** The six that matter most, the icon beside the words, then everything else, grouped. */
 export function Features() {
   return (
     <section id="features" className="mx-auto max-w-5xl scroll-mt-20 px-6 py-20">
-      <SectionHead eyebrow="Features" title="The small things that make it nice to use" />
+      <SectionHead eyebrow="Features" title="Small app, a lot inside">
+        It does one thing well, and plenty around it when you want more.
+      </SectionHead>
       <ul className="mt-10 grid grid-cols-1 gap-x-10 gap-y-2 md:grid-cols-2">
         {FEATURES.map((f) => (
           <li key={f.title} className="flex items-start gap-4 rounded-xl px-3 py-4 transition hover:bg-card/70">
@@ -144,6 +147,23 @@ export function Features() {
           </li>
         ))}
       </ul>
+
+      <h3 className="mt-14 text-center text-sm font-semibold uppercase tracking-[0.2em] text-faint">Everything else</h3>
+      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {EXTRAS.map((g) => (
+          <div key={g.group} className="rounded-2xl border border-edge bg-card/60 p-5">
+            <p className="font-semibold text-ink">{g.group}</p>
+            <ul className="mt-3 space-y-2">
+              {g.items.map((item) => (
+                <li key={item} className="flex gap-2.5 text-sm leading-relaxed text-mute">
+                  <span aria-hidden="true" className="mt-[0.55rem] h-1 w-1 shrink-0 rounded-full bg-cyan/70" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }
@@ -155,7 +175,7 @@ const ONLINE: { icon: IconName; what: string; detail: string }[] = [
   {
     icon: "refresh",
     what: "Update checks",
-    detail: "When it starts and every 6 hours. A switch in About turns them off.",
+    detail: "When it starts, when you come back to it, and every 6 hours. A switch in About turns them off.",
   },
   {
     icon: "cloudDown",
@@ -175,7 +195,7 @@ const ONLINE: { icon: IconName; what: string; detail: string }[] = [
 ];
 
 const ON_PC: { icon: IconName; what: string; detail: string }[] = [
-  { icon: "mic", what: "Your voice", detail: "Turned into text on your PC. The recording is deleted once the text is ready." },
+  { icon: "mic", what: "Your voice", detail: "Turned into text on your PC. The recordings stay here too, for playback in History." },
   { icon: "chip", what: "The speech model", detail: "Runs right on your PC, so dictation works offline." },
   { icon: "file", what: "Your transcripts", detail: "Kept in a small database in Scribe's folder." },
   { icon: "chart", what: "Your history and stats", detail: "Search them, clear them, or stop saving them." },

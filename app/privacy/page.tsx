@@ -54,8 +54,10 @@ export default async function PrivacyPage() {
           <section>
             <h2 className="text-xl font-semibold text-ink">The Scribe app</h2>
             <p className="mt-4">
-              Scribe has no account and no telemetry. Your audio is transcribed on your PC and deleted once the text is
-              ready, and your history stays in a local database you control. The app only connects out to check for
+              Scribe has no account and no telemetry. Your audio is transcribed on your PC and never uploaded. Each
+              recording is kept on your PC for playback in History and deleted with its transcript (after 30 days
+              by default), or right away if you turn off &ldquo;Save raw audio clips&rdquo;. Your history stays in a
+              local database you control. The app only connects out to check for
               updates, to download a model you pick, and to the optional GitHub backup and AI tools if you turn them on.
             </p>
             <p className="mt-3">
