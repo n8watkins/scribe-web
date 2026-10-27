@@ -165,3 +165,68 @@ html {
     animation-play-state: paused;
   }
 }
+
+/* Section separations: a few kinds, alternated down the page so each section
+   reads on its own and the page has a rhythm. */
+
+/* A glowing hairline across the top, cyan to purple, fading at both ends. */
+.sep-glow {
+  position: relative;
+}
+.sep-glow::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(64rem, 86%);
+  height: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.55), rgba(139, 92, 246, 0.55), transparent);
+  box-shadow: 0 0 18px 1px rgba(34, 211, 238, 0.25);
+}
+
+/* A soft tonal band: the page's raised tone fades in and out, no hard borders. */
+.sep-band {
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(10, 16, 32, 0.92) 9%,
+    rgba(10, 16, 32, 0.92) 91%,
+    transparent
+  );
+}
+
+/* An arch of light over the top of a band. */
+.sep-arc::before,
+.sep-arc-green::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 220px;
+  pointer-events: none;
+  background: radial-gradient(55% 120px at 50% 0, rgba(139, 92, 246, 0.16), transparent 100%);
+}
+.sep-arc-green::before {
+  background: radial-gradient(55% 120px at 50% 0, rgba(34, 197, 94, 0.13), transparent 100%);
+}
+
+/* An angled band: the raised tone with slanted top and bottom edges, each
+   edge lit by a thin cyan line. */
+.sep-angle {
+  position: relative;
+  --slant: clamp(1.5rem, 4vw, 3.5rem);
+  padding-block: var(--slant);
+  background:
+    linear-gradient(to bottom right, transparent calc(50% - 1px), rgba(34, 211, 238, 0.35) 50%, transparent calc(50% + 1px)) top / 100% var(--slant) no-repeat,
+    linear-gradient(to top left, transparent calc(50% - 1px), rgba(139, 92, 246, 0.35) 50%, transparent calc(50% + 1px)) bottom / 100% var(--slant) no-repeat,
+    linear-gradient(rgba(10, 16, 32, 0.92), rgba(10, 16, 32, 0.92)) center / 100% calc(100% - 2 * var(--slant)) no-repeat,
+    linear-gradient(to bottom right, transparent 50%, rgba(10, 16, 32, 0.92) 50%) top / 100% var(--slant) no-repeat,
+    linear-gradient(to top left, transparent 50%, rgba(10, 16, 32, 0.92) 50%) bottom / 100% var(--slant) no-repeat;
+}
+
+/* A phrase landing in the editor demo */
+@keyframes land {
+  from { opacity: 0; filter: blur(2px); }
+  to { opacity: 1; filter: none; }
+}

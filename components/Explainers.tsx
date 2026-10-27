@@ -1,5 +1,4 @@
 import {
-  BarChart3,
   BookA,
   CalendarClock,
   ClipboardPaste,
@@ -11,13 +10,12 @@ import {
   Languages,
   NotebookPen,
   Power,
-  Replace,
   Scissors,
-  Search,
   Timer,
   type LucideIcon,
 } from "lucide-react";
-import { GitHubIcon, Icon } from "@/components/Icons";
+import Image from "next/image";
+import { GitHubIcon, Icon, OpenAIIcon } from "@/components/Icons";
 import { AIExample } from "@/components/AIExample";
 import { ThemePreview } from "@/components/ThemePreview";
 import { GITHUB_URL, type IconName } from "@/lib/site";
@@ -84,7 +82,7 @@ const ONLINE: { icon: IconName; what: string; when: string }[] = [
 
 export function PrivacyFlow() {
   return (
-    <section id="private-by-design" className="scroll-mt-20 border-y border-edge/60 bg-bg-2/40">
+    <section id="private-by-design" className="sep-band sep-arc-green scroll-mt-20">
       <div className="mx-auto max-w-5xl px-6 py-20">
         <Head eyebrow="Private by design" title={<>Your voice stays <span className="gradient-text">on your PC</span></>} />
 
@@ -154,7 +152,7 @@ function SplitCopy({ eyebrow, title, line, children }: { eyebrow: string; title:
 export function LocalAI() {
   return (
     <>
-      <section id="local-ai" className="mx-auto grid max-w-6xl scroll-mt-20 items-center gap-10 px-6 py-20 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+      <section id="local-ai" className="sep-glow mx-auto grid max-w-6xl scroll-mt-20 items-center gap-10 px-6 py-20 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
         <SplitCopy
           eyebrow="Optional · local AI"
           title={<>Rewrite anything <span className="gradient-text">you highlight</span></>}
@@ -186,7 +184,7 @@ export function LocalAI() {
         </div>
       </section>
 
-      <section id="note-summaries" className="scroll-mt-20 border-y border-edge/60 bg-bg-2/40">
+      <section id="note-summaries" className="sep-band sep-arc scroll-mt-20">
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-20 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
           <div data-reveal className="md:order-first">
             <AIExample
@@ -221,14 +219,31 @@ const MODELS: { name: string; size: string; mb: number; langs: string; isDefault
 
 export function Models() {
   return (
-    <section id="models" className="scroll-mt-20">
+    <section id="models" className="sep-glow scroll-mt-20">
       <div className="mx-auto max-w-5xl px-6 py-20">
         <Head
           eyebrow="Models"
           title="Pick the model that fits your PC"
-          line="All of them are OpenAI's Whisper, running on your PC. Smaller is faster; bigger is more accurate. Each download is hash-checked, and Scribe uses your graphics card when it can."
+          line="Smaller is faster; bigger is more accurate. Each download is hash-checked, and Scribe uses your graphics card when it can."
         />
-        <div data-reveal className="mx-auto mt-12 max-w-3xl rounded-2xl border border-edge bg-card/60 p-5 sm:p-6">
+        {/* Whose models they are, and what runs them */}
+        <div data-reveal className="mx-auto mt-8 flex max-w-3xl flex-wrap items-center justify-center gap-3 text-sm">
+          <span className="inline-flex items-center gap-2.5 rounded-full border border-edge-strong bg-card px-4 py-2 font-semibold text-ink">
+            <span className="flex h-6 w-6 items-center justify-center rounded-md bg-white text-black">
+              <OpenAIIcon className="h-4 w-4" />
+            </span>
+            OpenAI Whisper models
+          </span>
+          <span className="text-faint" aria-hidden="true">
+            run on your PC by
+          </span>
+          <span className="sr-only">, run on your PC by</span>
+          <span className="inline-flex items-center gap-2.5 rounded-full border border-edge-strong bg-card px-4 py-2 font-semibold text-ink">
+            <Image src="/ggml.png" alt="" width={24} height={24} className="h-6 w-6 rounded-md" />
+            whisper.cpp
+          </span>
+        </div>
+        <div data-reveal className="mx-auto mt-8 max-w-3xl rounded-2xl border border-edge bg-card/60 p-5 sm:p-6">
           <div className="flex justify-between text-xs font-semibold uppercase tracking-wider text-faint">
             <span>← Faster</span>
             <span>More accurate →</span>
@@ -267,7 +282,7 @@ export function Models() {
 
 export function Themes() {
   return (
-    <section id="themes" className="scroll-mt-20 border-y border-edge/60 bg-bg-2/40">
+    <section id="themes" className="sep-band sep-arc scroll-mt-20">
       <div className="mx-auto max-w-5xl px-6 py-20">
         <Head eyebrow="Make it yours" title={<>Your colours, <span className="gradient-text">your Scribe</span></>} line="Six themes built in, including a light one. Try them here." />
         <div data-reveal className="mt-10">
@@ -286,70 +301,115 @@ export function Themes() {
   );
 }
 
-// Everything else the free app does, each checked against its source: one
-// icon per feature (lucide, the app's own icon set), four to a group.
-const MORE: { group: string; items: { Icon: LucideIcon; text: string }[] }[] = [
-  {
-    group: "Dictation",
-    items: [
-      { Icon: Hand, text: "Hands-free on the ~ key" },
-      { Icon: NotebookPen, text: "Quick notes: hold ~, tap Q" },
-      { Icon: Timer, text: "Stops after a minute of silence" },
-      { Icon: ClipboardPaste, text: "Ctrl + Alt + V pastes the last one" },
-    ],
-  },
-  {
-    group: "Your words",
-    items: [
-      { Icon: BookA, text: "A word list for names and jargon" },
-      { Icon: Replace, text: "Say \u201cmy email\u201d, get your address" },
-      { Icon: Scissors, text: "Leaves out \u201cum\u201d and \u201cuh\u201d" },
-      { Icon: Languages, text: "29 languages, or into English" },
-    ],
-  },
-  {
-    group: "History and notes",
-    items: [
-      { Icon: Search, text: "Search and play back what you said" },
-      { Icon: Combine, text: "Combine entries, open in your editor" },
-      { Icon: BarChart3, text: "Words, speed and latency stats" },
-      { Icon: CalendarClock, text: "Keep 30 days, forever, or nothing" },
-    ],
-  },
-  {
-    group: "Your setup",
-    items: [
-      { Icon: FileAudio, text: "Audio and video files into text" },
-      { Icon: FolderGit2, text: "Backup to a private GitHub repo" },
-      { Icon: FileDown, text: "Export Markdown, CSV or JSON" },
-      { Icon: Power, text: "Lives in the tray, starts with Windows" },
-    ],
-  },
+// Three things worth a closer look, each with a small picture of what it does
+// (checked against the app: quick notes turn the pill blue and save to Notes;
+// replacements apply to every transcript; Stats counts words, WPM and latency).
+function NoteVisual() {
+  return (
+    <div className="space-y-2.5">
+      <span className="inline-flex items-center gap-2 rounded-full border border-blue-400/50 bg-[#0a1220] px-3 py-1.5 text-xs text-ink">
+        <span className="h-2 w-2 rounded-full bg-blue-400 shadow-[0_0_8px_rgb(96_165_250)]" />
+        Note: call the venue about Saturday
+      </span>
+      <div className="flex items-center gap-2 rounded-lg border border-edge bg-bg/70 px-3 py-2 text-xs text-mute">
+        <NotebookPen className="h-3.5 w-3.5 text-blue-300" aria-hidden="true" />
+        Saved to Notes, nothing pasted
+      </div>
+    </div>
+  );
+}
+
+function ReplaceVisual() {
+  return (
+    <div className="space-y-2">
+      {[
+        ["my email", "n8@example.com"],
+        ["my sign-off", "Thanks, Nate"],
+      ].map(([say, get]) => (
+        <div key={say} className="flex items-center gap-2 text-xs">
+          <span className="rounded-md border border-edge-strong bg-card-2 px-2 py-1 text-mute">&ldquo;{say}&rdquo;</span>
+          <span className="text-faint" aria-hidden="true">
+            &rarr;
+          </span>
+          <span className="truncate rounded-md border border-cyan/40 bg-cyan/[0.08] px-2 py-1 text-ink">{get}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function StatsVisual() {
+  return (
+    <div className="grid grid-cols-3 gap-2">
+      {[
+        ["Words today", "1,284"],
+        ["Average WPM", "142"],
+        ["Latency avg", "0.6 s"],
+      ].map(([label, value]) => (
+        <div key={label} className="rounded-lg border border-edge bg-bg/70 px-2.5 py-2">
+          <p className="text-[0.6rem] font-bold uppercase tracking-wide text-faint">{label}</p>
+          <p className="mt-0.5 text-sm font-bold tabular-nums text-ink">{value}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const HIGHLIGHTS: { title: string; line: string; visual: React.ReactNode }[] = [
+  { title: "Quick notes", line: "Hold the ~ key and tap Q. The pill turns blue and the thought goes to your Notes instead of the page.", visual: <NoteVisual /> },
+  { title: "Your words, your way", line: "Say a short phrase and get the long one. Add names and jargon to a word list so they come out right.", visual: <ReplaceVisual /> },
+  { title: "History and stats", line: "Search and play back everything you said, and see how much you talk instead of type.", visual: <StatsVisual /> },
+];
+
+// The rest, short and in one list: one icon each (lucide, the app's own set).
+const ALSO: { Icon: LucideIcon; text: string }[] = [
+  { Icon: Hand, text: "Hands-free on the ~ key" },
+  { Icon: Timer, text: "Stops after a minute of silence" },
+  { Icon: ClipboardPaste, text: "Ctrl + Alt + V pastes the last one" },
+  { Icon: Scissors, text: "Leaves out \u201cum\u201d and \u201cuh\u201d if you like" },
+  { Icon: Languages, text: "29 languages, or into English" },
+  { Icon: FileAudio, text: "Audio and video files into text" },
+  { Icon: Combine, text: "Combine entries, open in your editor" },
+  { Icon: CalendarClock, text: "Keep history 30 days, forever, or not at all" },
+  { Icon: FolderGit2, text: "Backup to a private GitHub repo" },
+  { Icon: FileDown, text: "Export Markdown, CSV or JSON" },
+  { Icon: Power, text: "Lives in the tray, starts with Windows" },
+  { Icon: BookA, text: "A word list for names and jargon" },
 ];
 
 export function More() {
   return (
-    <section id="features" className="scroll-mt-20">
-      <div className="mx-auto max-w-6xl px-6 py-20">
-        <Head eyebrow="And the rest" title={<>More than <span className="gradient-text">dictation</span></>} line="All of it in the free app, all of it on your PC." />
-        <div data-reveal className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {MORE.map((g) => (
-            <div key={g.group} className="rounded-2xl border border-edge bg-card/60 p-5 transition duration-300 hover:border-cyan/40 hover:bg-card">
-              <p className="font-mono text-xs uppercase tracking-wider text-cyan">{g.group}</p>
-              <ul className="mt-4 space-y-3">
-                {g.items.map(({ Icon: ItemIcon, text }) => (
-                  <li key={text} className="group/item flex items-center gap-3 text-sm leading-snug text-ink">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-cyan/20 bg-cyan/[0.08] text-cyan transition group-hover/item:scale-105 group-hover/item:bg-cyan/15">
-                      <ItemIcon className="h-4 w-4" aria-hidden="true" />
-                    </span>
-                    {text}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+    <>
+      <section id="features" className="sep-glow scroll-mt-20">
+        <div className="mx-auto max-w-6xl px-6 py-20">
+          <Head eyebrow="And the rest" title={<>More than <span className="gradient-text">dictation</span></>} line="All of it in the free app, all of it on your PC." />
+          <div data-reveal className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
+            {HIGHLIGHTS.map((h) => (
+              <article key={h.title} className="flex flex-col rounded-2xl border border-edge bg-card/60 p-6 transition duration-300 hover:-translate-y-0.5 hover:border-cyan/40">
+                <div className="flex min-h-[6.5rem] items-center rounded-xl border border-edge/70 bg-bg-2/60 p-4">{h.visual}</div>
+                <h3 className="mt-5 font-semibold text-ink">{h.title}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-mute">{h.line}</p>
+              </article>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <section aria-labelledby="also-title" className="scroll-mt-20">
+        <div className="mx-auto max-w-5xl px-6 pt-4 pb-20">
+          <h3 id="also-title" className="text-center text-sm font-semibold uppercase tracking-[0.2em] text-faint">
+            Also in the box
+          </h3>
+          <ul data-reveal className="mt-8 grid grid-cols-1 gap-x-10 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+            {ALSO.map(({ Icon: ItemIcon, text }) => (
+              <li key={text} className="flex items-center gap-3 text-sm text-mute">
+                <ItemIcon className="h-4 w-4 shrink-0 text-cyan" aria-hidden="true" />
+                {text}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    </>
   );
 }

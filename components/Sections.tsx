@@ -9,6 +9,7 @@ import {
   type Release,
 } from "@/lib/site";
 import { DownloadIcon, GitHubIcon, KofiIcon, StarIcon } from "@/components/Icons";
+import { EditorDemo } from "@/components/EditorDemo";
 import { Steps } from "@/components/Steps";
 import { Faq } from "@/components/Faq";
 
@@ -111,9 +112,14 @@ function SectionHead({ eyebrow, title, children }: { eyebrow: string; title: Rea
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="scroll-mt-20 border-y border-edge/60 bg-bg-2/40">
+    <section id="how-it-works" className="sep-angle scroll-mt-20">
       <div className="mx-auto max-w-6xl px-6 py-20">
-        <SectionHead eyebrow="How it works" title={<>Hold, talk, <span className="gradient-text">let go</span></>} />
+        <SectionHead eyebrow="How it works" title={<>Hold, talk, <span className="gradient-text">let go</span></>}>
+          Your words land where you&apos;re typing, a phrase at a time, while you&apos;re still talking.
+        </SectionHead>
+        <div data-reveal className="mt-10">
+          <EditorDemo />
+        </div>
         <Steps />
       </div>
     </section>
@@ -122,7 +128,7 @@ export function HowItWorks() {
 
 export function FAQ() {
   return (
-    <section id="faq" className="mx-auto max-w-3xl scroll-mt-20 px-6 py-20">
+    <section id="faq" className="sep-glow mx-auto max-w-3xl scroll-mt-20 px-6 py-20">
       <SectionHead eyebrow="FAQ" title="Questions" />
       <Faq items={FAQS} />
     </section>
