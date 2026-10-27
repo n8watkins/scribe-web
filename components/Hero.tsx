@@ -1,5 +1,5 @@
 import { GITHUB_URL, MAC_LINUX_REQUEST_URL, type Release } from "@/lib/site";
-import { DownloadIcon, GitHubIcon, WindowsIcon } from "@/components/Icons";
+import { CheckIcon, DownloadIcon, GitHubIcon, WindowsIcon } from "@/components/Icons";
 import { DemoVideo } from "@/components/DemoVideo";
 import { Kbd } from "@/components/Kbd";
 
@@ -10,19 +10,19 @@ export function Hero({ release, stars }: { release: Release; stars: number | nul
   return (
     <section className="relative mx-auto grid max-w-6xl items-center gap-12 px-6 pt-14 pb-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:pt-24">
       <div className="text-center lg:text-left">
-        <span className="inline-flex items-center gap-2 rounded-full border border-edge bg-card/70 px-3 py-1 text-sm text-mute">
+        <span style={{ "--d": "0ms" } as React.CSSProperties} className="rise inline-flex items-center gap-2 rounded-full border border-edge bg-card/70 px-3 py-1 text-sm text-mute">
           <span className="h-2 w-2 rounded-full bg-green shadow-[0_0_10px_var(--color-green)]" aria-hidden="true" />
           Free speech-to-text for Windows
         </span>
-        <h1 className="mt-6 text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl xl:text-7xl">
+        <h1 style={{ "--d": "90ms" } as React.CSSProperties} className="rise mt-6 text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl xl:text-7xl">
           Talk. <span className="gradient-text">It types.</span>
         </h1>
-        <p className="mx-auto mt-5 max-w-xl text-lg text-mute sm:text-xl lg:mx-0">
+        <p style={{ "--d": "180ms" } as React.CSSProperties} className="rise mx-auto mt-5 max-w-xl text-lg text-mute sm:text-xl lg:mx-0">
           Hold <Kbd>Ctrl</Kbd> + <Kbd>Win</Kbd>, talk, and let go. Your words show up wherever you&apos;re typing.
           It all runs <span className="font-semibold text-ink">on your PC</span>, so your voice never leaves it.
         </p>
 
-        <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
+        <div style={{ "--d": "270ms" } as React.CSSProperties} className="rise mt-9 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
           <a
             href={release.url}
             className="inline-flex items-center gap-2.5 whitespace-nowrap rounded-full bg-gradient-to-r from-cyan to-purple px-7 py-3.5 font-semibold text-bg shadow-lg shadow-cyan/20 transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
@@ -43,20 +43,30 @@ export function Hero({ release, stars }: { release: Release; stars: number | nul
             )}
           </a>
         </div>
-        <p className="mt-5 flex items-center justify-center gap-2 text-sm text-faint lg:justify-start">
-          <WindowsIcon />
-          v{release.version} · {release.sizeMb} MB · Windows 10 and 11, 64-bit
-        </p>
-        <p className="mt-1.5 text-sm text-faint">Free and open source · no account · no tracking</p>
-        <p className="mt-1.5 text-sm text-faint">
-          On a Mac or Linux?{" "}
-          <a href={MAC_LINUX_REQUEST_URL} className="text-mute underline decoration-faint/50 underline-offset-2 transition hover:text-ink">
-            Ask for it
-          </a>
-        </p>
+        <div style={{ "--d": "360ms" } as React.CSSProperties} className="rise">
+          <p className="mt-5 flex items-center justify-center gap-2 text-sm text-faint lg:justify-start">
+            <WindowsIcon />
+            v{release.version} · {release.sizeMb} MB · Windows 10 and 11, 64-bit
+          </p>
+          <ul className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-sm text-mute lg:justify-start">
+            {["Free and open source", "No account", "Works offline"].map((item) => (
+              <li key={item} className="flex items-center gap-1.5">
+                <CheckIcon className="h-4 w-4 text-green" />
+                {item}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-sm text-faint">
+            On a Mac or Linux?{" "}
+            <a href={MAC_LINUX_REQUEST_URL} className="text-mute underline decoration-faint/50 underline-offset-2 transition hover:text-ink">
+              Ask for it
+            </a>
+          </p>
+        </div>
       </div>
 
       <DemoVideo
+        className="rise [--d:200ms]"
         src="/videos/Scribe-15a.mp4"
         poster="/posters/scribe-15a.webp"
         zoom={{ scale: 1.25, origin: "50% 70%" }}

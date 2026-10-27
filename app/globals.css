@@ -120,3 +120,48 @@ html {
 .flow-node {
   animation: flow-glow 4.5s ease-in-out infinite;
 }
+
+/* The hero video's placeholder sweep */
+@keyframes sweep {
+  from { background-position: 100% 0; }
+  to { background-position: -100% 0; }
+}
+
+/* The hero comes in on load: each part rises in turn (--d is its delay).
+   Under reduced motion the global rule above cuts it to an instant. */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+.rise {
+  animation: rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+
+/* Private by design: each step's icon moves while its step is lit */
+@keyframes icon-pop {
+  0%, 34%, 100% { transform: none; }
+  12% { transform: scale(1.18); }
+  22% { transform: scale(1); }
+}
+@keyframes mic-ring {
+  0% { transform: scale(0.8); opacity: 0.6; }
+  30%, 100% { transform: scale(1.9); opacity: 0; }
+}
+.flow-node .flow-icon {
+  animation: icon-pop 4.5s ease-in-out infinite;
+  animation-delay: inherit;
+}
+.flow-node .flow-ring {
+  animation: mic-ring 4.5s ease-out infinite;
+  animation-delay: inherit;
+}
+
+/* The privacy loop waits for its section to come into view (Reveal sets data-shown). */
+@media (scripting: enabled) {
+  [data-reveal]:not([data-shown]) .flow-node,
+  [data-reveal]:not([data-shown]) .flow-node *,
+  [data-reveal]:not([data-shown]) .flow-dot {
+    animation-play-state: paused;
+  }
+}

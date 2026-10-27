@@ -1,5 +1,6 @@
-import { Icon } from "@/components/Icons";
-import { TypeOut } from "@/components/TypeOut";
+import { CheckIcon, GitHubIcon, Icon } from "@/components/Icons";
+import { AIExample } from "@/components/AIExample";
+import { ThemePreview } from "@/components/ThemePreview";
 import { GITHUB_URL, type IconName } from "@/lib/site";
 
 // The page's middle: where your voice goes, the optional local AI, the models,
@@ -23,7 +24,7 @@ function Arrow({ delay }: { delay: string }) {
     <span aria-hidden="true" className="relative flex items-center justify-center text-faint">
       <span className="absolute inset-x-1/2 top-0 h-full w-0 md:inset-x-0 md:top-1/2 md:h-0 md:w-full">
         <span
-          className="absolute left-[-3px] h-1.5 w-1.5 rounded-full bg-green shadow-[0_0_10px_var(--color-green)] [animation:flow-dot-y_4.5s_linear_infinite] md:top-[-3px] md:left-auto md:[animation:flow-dot-x_4.5s_linear_infinite]"
+          className="flow-dot absolute left-[-3px] h-1.5 w-1.5 rounded-full bg-green shadow-[0_0_10px_var(--color-green)] [animation:flow-dot-y_4.5s_linear_infinite] md:top-[-3px] md:left-auto md:[animation:flow-dot-x_4.5s_linear_infinite]"
           style={{ animationDelay: delay, opacity: 0 }}
         />
       </span>
@@ -40,8 +41,11 @@ function Node({ icon, title, sub, delay }: { icon: IconName; title: string; sub:
       className="flow-node flex flex-1 items-center gap-3 rounded-xl border border-edge bg-card px-4 py-3.5 md:flex-col md:text-center"
       style={{ animationDelay: delay }}
     >
-      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green/10 text-green">
-        <Icon name={icon} />
+      <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green/10 text-green">
+        {icon === "mic" && <span aria-hidden="true" className="flow-ring absolute inset-0 rounded-xl border border-green/50" />}
+        <span className="flow-icon">
+          <Icon name={icon} />
+        </span>
       </span>
       <span>
         <span className="block font-semibold text-ink">{title}</span>
@@ -98,32 +102,19 @@ export function PrivacyFlow() {
               </li>
             ))}
           </ul>
-          <p className="mt-6 text-center text-sm text-mute">
-            Never your audio. No account, no tracking.{" "}
-            <a href={GITHUB_URL} className="font-semibold text-cyan underline decoration-cyan/40 underline-offset-4 transition hover:text-ink">
-              Check the code
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 text-sm text-mute sm:flex-row">
+            <span>Never your audio. No account, no tracking.</span>
+            <a
+              href={GITHUB_URL}
+              className="inline-flex items-center gap-2 rounded-full border border-edge-strong bg-card px-3.5 py-1.5 font-semibold text-ink transition hover:border-cyan/60"
+            >
+              <GitHubIcon className="h-4 w-4" />
+              Check the code: n8watkins/scribe
             </a>
-          </p>
+          </div>
         </div>
       </div>
     </section>
-  );
-}
-
-function Bubble({ label, icon, children, tone = "say" }: { label: string; icon: IconName; children: React.ReactNode; tone?: "say" | "get" | "context" }) {
-  const box = {
-    say: "border-edge-strong bg-card-2",
-    get: "border-cyan/40 bg-cyan/[0.06]",
-    context: "border-edge border-dashed bg-transparent",
-  }[tone];
-  return (
-    <div className={`rounded-xl border p-4 ${box}`}>
-      <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-faint">
-        <Icon name={icon} className="h-3.5 w-3.5" />
-        {label}
-      </p>
-      <div className="mt-2 text-[0.95rem] leading-relaxed text-ink">{children}</div>
-    </div>
   );
 }
 
@@ -141,52 +132,28 @@ export function LocalAI() {
         }
       />
 
-      <div data-reveal className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
-        <div className="rounded-2xl border border-edge bg-card/60 p-5 transition duration-300 hover:border-cyan/30">
-          <p className="font-semibold text-ink">Rewrite selected text, in any app</p>
-          <p className="mt-1 text-sm text-mute">Highlight it, press <span className="font-mono text-ink">Ctrl + Alt + R</span>, say what to change.</p>
-          <div className="mt-4 space-y-2.5">
-            <Bubble label="Selected" icon="file" tone="context">
-              <span className="text-mute">hey so i think we should push the launch, screenshots arent done and the copy needs another pass</span>
-            </Bubble>
-            <Bubble label="You say" icon="mic">
-              <TypeOut text="Make this clear and professional." speed={45} />
-            </Bubble>
-            <Bubble label="You get" icon="spark" tone="get">
-              <TypeOut
-                text="Let's move the launch date. The screenshots aren't finished, and the copy needs one more review."
-                delay={1900}
-                speed={18}
-              />
-            </Bubble>
-          </div>
-        </div>
-
-        <div className="rounded-2xl border border-edge bg-card/60 p-5 transition duration-300 hover:border-cyan/30">
-          <p className="font-semibold text-ink">Sum up a note</p>
-          <p className="mt-1 text-sm text-mute">One click on any note gives a summary and its to-dos. You can change what it asks for.</p>
-          <div className="mt-4 space-y-2.5">
-            <Bubble label="Your note" icon="mic">
-              ok so tomorrow I need to send Maya the new timeline, go over the homepage copy, and um book the dentist before Friday
-            </Bubble>
-            <Bubble label="You get" icon="spark" tone="get">
-              <TypeOut text="Plans for tomorrow." delay={600} speed={30} />
-              <ul className="mt-2 list-disc space-y-0.5 pl-5 text-[0.9rem]">
-                {["Send Maya the new timeline", "Review the homepage copy", "Book the dentist before Friday"].map((item, i) => (
-                  <li key={item}>
-                    <TypeOut text={item} delay={1300 + i * 900} speed={22} />
-                  </li>
-                ))}
-              </ul>
-            </Bubble>
-          </div>
-        </div>
+      <div data-reveal className="mx-auto mt-12 max-w-3xl space-y-6">
+        <AIExample
+          title="Rewrite selected text, in any app"
+          how={
+            <>
+              Highlight it, press <span className="font-mono text-ink">Ctrl + Alt + R</span> and say what to change.
+            </>
+          }
+          context="hey so i think we should push the launch, screenshots arent done and the copy needs another pass"
+          sayLabel="You say"
+          say="Make this clear and professional."
+          get="Let's move the launch date. The screenshots aren't finished, and the copy needs one more review."
+        />
+        <AIExample
+          title="Sum up a note"
+          how="One click on any note gives a summary and its to-dos. You can change what it asks for."
+          sayLabel="Your note"
+          say="ok so tomorrow I need to send Maya the new timeline, go over the homepage copy, and um book the dentist before Friday"
+          get="Plans for tomorrow."
+          bullets={["Send Maya the new timeline", "Review the homepage copy", "Book the dentist before Friday"]}
+        />
       </div>
-
-      <p className="mt-6 flex items-center justify-center gap-2 text-center text-sm text-mute">
-        <Icon name="lock" className="h-4 w-4 text-green" />
-        It all stays on your PC, unless you choose an online AI service instead.
-      </p>
     </section>
   );
 }
@@ -248,125 +215,95 @@ export function Models() {
   );
 }
 
-// The app's themes (App.css): background, raised surface, accent, text.
-const THEMES: { name: string; bg: string; panel: string; accent: string; text: string }[] = [
-  { name: "Midnight", bg: "#070b14", panel: "#0d1320", accent: "#22d3ee", text: "#f8fafc" },
-  { name: "Ocean", bg: "#04141c", panel: "#0a2230", accent: "#2dd4bf", text: "#ecfeff" },
-  { name: "Slate", bg: "#0b0e14", panel: "#151a23", accent: "#818cf8", text: "#f1f5f9" },
-  { name: "Emerald", bg: "#05140d", panel: "#0a2117", accent: "#10b981", text: "#ecfdf5" },
-  { name: "Violet", bg: "#0c0a1a", panel: "#181233", accent: "#8b5cf6", text: "#f5f3ff" },
-  { name: "Pewter", bg: "#d6dadf", panel: "#e8ebef", accent: "#075985", text: "#1f2937" },
-];
-
-function MiniWindow({ bg, panel, accent, text, tall = false }: { bg: string; panel: string; accent: string; text: string; tall?: boolean }) {
-  return (
-    <div aria-hidden="true" className={`flex overflow-hidden rounded-lg border border-white/10 ${tall ? "h-44" : "h-24"}`} style={{ background: bg }}>
-      <div className="w-1/4 space-y-1.5 p-2" style={{ background: panel }}>
-        <span className="block h-1.5 w-3/4 rounded-full" style={{ background: accent }} />
-        {[0, 1, 2].map((i) => (
-          <span key={i} className="block h-1.5 w-2/3 rounded-full opacity-40" style={{ background: text }} />
-        ))}
-      </div>
-      <div className="flex-1 space-y-2 p-2.5">
-        <span className="block h-2 w-1/2 rounded-full opacity-80" style={{ background: text }} />
-        <div className="space-y-1.5 rounded-md p-2" style={{ background: panel }}>
-          <span className="block h-1.5 w-5/6 rounded-full opacity-40" style={{ background: text }} />
-          <span className="block h-1.5 w-2/3 rounded-full opacity-40" style={{ background: text }} />
-        </div>
-        {tall && (
-          <div className="space-y-1.5 rounded-md p-2" style={{ background: panel }}>
-            <span className="block h-1.5 w-3/4 rounded-full opacity-40" style={{ background: text }} />
-            <span className="block h-1.5 w-1/2 rounded-full opacity-40" style={{ background: text }} />
-            <span className="block h-1.5 w-2/3 rounded-full opacity-40" style={{ background: text }} />
-          </div>
-        )}
-        <span className="block h-3 w-10 rounded-full" style={{ background: accent }} />
-      </div>
-    </div>
-  );
-}
-
-// A custom theme is five colours you pick (Themes.tsx: background, surface,
-// accent, text, muted text); the rest of the palette is worked out from them.
-const CUSTOM = { bg: "#1a0f1f", panel: "#2a1830", accent: "#f472b6", text: "#fdf2f8", muted: "#d8a7c4" };
-
 export function Themes() {
   return (
     <section id="themes" className="mx-auto max-w-5xl scroll-mt-20 px-6 py-20">
-      <Head
-        eyebrow="Make it yours"
-        title={<>Your colours, <span className="gradient-text">your Scribe</span></>}
-        line="Pick five colours and Scribe builds a whole theme from them. Or start from one of six."
-      />
-      <div data-reveal className="mt-12 grid grid-cols-1 items-center gap-8 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
-        {/* The custom theme, large, with the five colours it comes from */}
-        <div className="group rounded-2xl border border-edge bg-card/60 p-4 transition duration-300 hover:border-cyan/40">
-          <div className="transition duration-500 group-hover:scale-[1.015]">
-            <MiniWindow bg={CUSTOM.bg} panel={CUSTOM.panel} accent={CUSTOM.accent} text={CUSTOM.text} tall />
-          </div>
-          <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-mute">
-            {(
-              [
-                ["Background", CUSTOM.bg],
-                ["Surface", CUSTOM.panel],
-                ["Accent", CUSTOM.accent],
-                ["Text", CUSTOM.text],
-                ["Muted text", CUSTOM.muted],
-              ] as const
-            ).map(([label, c]) => (
-              <span key={label} className="flex items-center gap-1.5">
-                <span className="h-3.5 w-3.5 rounded-full ring-1 ring-white/20" style={{ background: c }} />
-                {label}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* The six built in */}
-        <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-          {THEMES.map((t) => (
-            <li key={t.name} className="group">
-              <div className="transition duration-300 group-hover:-translate-y-0.5">
-                <MiniWindow {...t} />
-              </div>
-              <p className="mt-2 text-center text-sm text-mute transition group-hover:text-ink">{t.name}</p>
-            </li>
-          ))}
-        </ul>
+      <Head eyebrow="Make it yours" title={<>Your colours, <span className="gradient-text">your Scribe</span></>} line="Six themes built in, including a light one. Try them here." />
+      <div data-reveal className="mt-10">
+        <ThemePreview />
       </div>
+      <p className="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center text-sm text-mute">
+        <span className="flex -space-x-1" aria-hidden="true">
+          {["#f472b6", "#facc15", "#34d399", "#60a5fa", "#f8fafc"].map((c) => (
+            <span key={c} className="h-4 w-4 rounded-full ring-2 ring-bg" style={{ background: c }} />
+          ))}
+        </span>
+        Or make your own: pick five colours in Scribe and it builds the rest of the theme.
+      </p>
     </section>
   );
 }
 
-// Everything else, one line each.
-const MORE: { label: string; icon: IconName; line: string }[] = [
-  { label: "Quick notes", icon: "file", line: "Hold ~ and tap Q to save a thought to Notes instead of pasting it." },
-  { label: "History", icon: "history", line: "Search, play back and combine everything you've said." },
-  { label: "Cleaner text", icon: "spark", line: "Your own word list, replacements, and fewer ums." },
-  { label: "Files", icon: "cloudDown", line: "Turn audio and video files into text." },
-  { label: "Backup", icon: "github", line: "A private GitHub repo, or export to Markdown, CSV or JSON." },
-  { label: "Your keys", icon: "keyboard", line: "Change any shortcut. Hands-free on the ~ key." },
+// Everything else the free app does, each checked against its source.
+const MORE: { group: string; icon: IconName; items: string[] }[] = [
+  {
+    group: "Dictation",
+    icon: "mic",
+    items: [
+      "Hands-free mode on the ~ key",
+      "Quick notes: hold ~ and tap Q",
+      "Stops by itself after a minute of silence",
+      "Ctrl + Alt + V pastes your last one again",
+      "Ctrl + Alt + X throws a take away",
+    ],
+  },
+  {
+    group: "Your words",
+    icon: "spark",
+    items: [
+      "Your own word list for names and jargon",
+      "Replacements: say \u201cmy email\u201d, get your address",
+      "Leaves out \u201cum\u201d and \u201cuh\u201d if you like",
+      "29 languages, or translate any of them to English",
+      "Turns audio and video files into text",
+    ],
+  },
+  {
+    group: "History and notes",
+    icon: "history",
+    items: [
+      "Search, filter and play back everything you said",
+      "Combine entries, or open them in your editor",
+      "Stats: words today, speed and latency",
+      "Keep it 30 days, forever, or not at all",
+    ],
+  },
+  {
+    group: "Your setup",
+    icon: "keyboard",
+    items: [
+      "Change any shortcut",
+      "A floating pill you can move and recolour",
+      "Back up to a private GitHub repo",
+      "Export to Markdown, CSV or JSON",
+      "Lives in the tray; starts with Windows if you want",
+    ],
+  },
 ];
 
 export function More() {
   return (
     <section id="features" className="scroll-mt-20 border-t border-edge/60">
       <div className="mx-auto max-w-5xl px-6 py-20">
-        <Head eyebrow="And the rest" title="The small things" />
-        <ul data-reveal className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {MORE.map((m) => (
-            <li
-              key={m.label}
-              className="rounded-2xl border border-edge bg-card/60 p-5 transition duration-300 hover:-translate-y-0.5 hover:border-cyan/40 hover:bg-card"
-            >
+        <Head eyebrow="And the rest" title={<>More than <span className="gradient-text">dictation</span></>} line="All of it in the free app, all of it on your PC." />
+        <div data-reveal className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2">
+          {MORE.map((g) => (
+            <div key={g.group} className="rounded-2xl border border-edge bg-card/60 p-5 transition duration-300 hover:border-cyan/40 hover:bg-card">
               <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-cyan">
-                <Icon name={m.icon} className="h-4 w-4" />
-                {m.label}
+                <Icon name={g.icon} className="h-4 w-4" />
+                {g.group}
               </p>
-              <p className="mt-3 leading-relaxed text-ink">{m.line}</p>
-            </li>
+              <ul className="mt-4 space-y-2.5">
+                {g.items.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-[0.95rem] text-ink">
+                    <CheckIcon className="mt-1 h-4 w-4 shrink-0 text-green" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </section>
   );
