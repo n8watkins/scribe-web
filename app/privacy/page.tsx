@@ -19,8 +19,8 @@ export default async function PrivacyPage() {
     <>
       <Nav release={release} />
       <main id="top" className="mx-auto max-w-3xl px-6 py-16 sm:py-20">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan">Privacy policy</p>
-        <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">Nothing to track</h1>
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan">Scribe</p>
+        <h1 className="mt-3 text-4xl font-bold tracking-tight sm:text-5xl">Privacy policy</h1>
         <p className="mt-3 text-sm text-faint">Last updated {UPDATED}</p>
 
         <div className="mt-10 space-y-10 leading-relaxed text-mute">

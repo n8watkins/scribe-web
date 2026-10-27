@@ -3,143 +3,115 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * How Scribe works, acted out: the hotkey goes down, the pill listens and
- * fills in phrase by phrase while you talk, the key comes up, and the words
- * land at the cursor in an ordinary text field. Beside it, what the PC is doing
- * at each moment, step by step, lit in time with the demo.
+ * How Scribe works, acted out: the hotkey goes down, the pill fills in phrase
+ * by phrase while you talk, the key comes up, and the words are typed into an
+ * ordinary text field. Beside it, the four steps, with a rail that fills
+ * smoothly as the loop moves through them.
  *
- * One timer drives it (no animation library), it pauses while off screen, and
- * under reduced motion it shows the finished state with every step listed.
+ * One clock drives everything (requestAnimationFrame over a 9-second loop), so
+ * the typing eases in character by character and the rail and highlight stay
+ * in step with it. It pauses off screen; under reduced motion it shows the
+ * finished state with every step lit.
  */
 
 const PHRASES = ["Send Maria the draft", "by Friday,", "and copy me on it."];
 const SENTENCE = PHRASES.join(" ");
 
-type Phase = "idle" | "press" | "listen" | "release" | "typed";
+// The loop, in ms.
+const PRESS = 800; // keys go down
+const TALK = 1500; // talking starts; phrases arrive every PHRASE_GAP
+const PHRASE_GAP = 950;
+const RELEASE = 4600; // keys come up
+const TYPE = 5100; // typing starts
+const TYPE_FOR = 1500;
+const LOOP = 9000;
 
-// What happens on the machine, in order. `at` is the phase that lights it.
-const STEPS: { at: Phase; title: string; body: string }[] = [
-  {
-    at: "press",
-    title: "Ctrl + Win goes down",
-    body: "Scribe opens your microphone and starts a 16 kHz recording in a temporary folder on your PC.",
-  },
-  {
-    at: "listen",
-    title: "You talk",
-    body: "Each phrase goes to whisper.cpp, already loaded in memory on 127.0.0.1, so it transcribes while you are still speaking.",
-  },
-  {
-    at: "release",
-    title: "You let go",
-    body: "The last phrase finishes. The text is ready the moment the key comes up, with nothing left to wait for.",
-  },
-  {
-    at: "typed",
-    title: "It types",
-    body: "Scribe types the words where your cursor is, in any app, then deletes the temporary recording.",
-  },
+// Where each step starts on the clock (the rail fills between them).
+const STEP_AT = [PRESS, TALK, RELEASE, TYPE, TYPE + TYPE_FOR];
+
+const STEPS = [
+  { title: "Hold Ctrl + Win", body: "Scribe starts recording to a temporary file on your PC." },
+  { title: "Talk", body: "whisper.cpp turns each phrase into text while you're still talking." },
+  { title: "Let go", body: "The last phrase finishes, so there's nothing to wait for." },
+  { title: "It types", body: "The words go wherever your cursor is. The recording is deleted." },
 ];
 
-const ORDER: Phase[] = ["idle", "press", "listen", "release", "typed"];
-const HOLD: Record<Phase, number> = { idle: 900, press: 700, listen: 900, release: 700, typed: 2600 };
-const PHRASE_EVERY = 850; // ms between phrases while listening
+const clamp = (v: number) => Math.min(1, Math.max(0, v));
+const easeOut = (v: number) => 1 - Math.pow(1 - v, 3);
 
 export function DictationDemo() {
   const root = useRef<HTMLDivElement>(null);
-  const [phase, setPhase] = useState<Phase>("typed");
-  const [heard, setHeard] = useState(PHRASES.length);
-  const [typed, setTyped] = useState(SENTENCE.length);
-  const [animated, setAnimated] = useState(false);
+  // null: not animating (reduced motion, or before it starts): show it finished.
+  const [t, setT] = useState<number | null>(null);
 
   useEffect(() => {
     const el = root.current;
     if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    setAnimated(true);
-    let timer = 0;
-    let visible = false;
-    let i = 0;
-    let p = 0;
-    let t = 0;
-
-    const run = () => {
-      if (!visible) return;
-      const current = ORDER[i];
-      setPhase(current);
-      if (current === "idle") {
-        setHeard(0);
-        setTyped(0);
-      }
-      if (current === "listen" && p < PHRASES.length) {
-        p += 1;
-        setHeard(p);
-        timer = window.setTimeout(run, PHRASE_EVERY);
-        return;
-      }
-      if (current === "typed" && t < SENTENCE.length) {
-        // Typed out fast, as an input simulation does.
-        t = Math.min(SENTENCE.length, t + 3);
-        setTyped(t);
-        timer = window.setTimeout(run, 16);
-        return;
-      }
-      timer = window.setTimeout(() => {
-        i = (i + 1) % ORDER.length;
-        if (ORDER[i] === "idle") {
-          p = 0;
-          t = 0;
-        }
-        run();
-      }, HOLD[current]);
+    let raf = 0;
+    let start = 0;
+    let pausedAt = 0;
+    const tick = (now: number) => {
+      if (!start) start = now - pausedAt;
+      setT((now - start) % LOOP);
+      raf = requestAnimationFrame(tick);
     };
-
-    const io = new IntersectionObserver(([entry]) => {
-      const was = visible;
-      visible = entry.isIntersecting;
-      if (visible && !was) run();
-      if (!visible) window.clearTimeout(timer);
-    }, { threshold: 0.3 });
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          raf = requestAnimationFrame(tick);
+        } else {
+          cancelAnimationFrame(raf);
+          pausedAt = start ? (performance.now() - start) % LOOP : 0;
+          start = 0;
+        }
+      },
+      { threshold: 0.3 }
+    );
     io.observe(el);
     return () => {
       io.disconnect();
-      window.clearTimeout(timer);
+      cancelAnimationFrame(raf);
     };
   }, []);
 
-  const keysDown = phase === "press" || phase === "listen";
-  const pill =
-    phase === "idle" || phase === "typed"
-      ? null
-      : phase === "release"
-        ? "Finishing"
-        : "Listening";
-  const stepIndex = STEPS.findIndex((s) => s.at === phase);
+  const done = t === null;
+  const now = t ?? LOOP - 1;
+  const keysDown = !done && now >= PRESS && now < RELEASE;
+  const heard = done ? 0 : now < TALK ? 0 : Math.min(PHRASES.length, 1 + Math.floor((now - TALK) / PHRASE_GAP));
+  const pillShown = !done && now >= PRESS && now < TYPE;
+  const typed = done ? SENTENCE.length : Math.round(easeOut(clamp((now - TYPE) / TYPE_FOR)) * SENTENCE.length);
+  // The rail: 0 to 4 across the steps, continuous.
+  const fill = done
+    ? STEPS.length
+    : STEPS.reduce((acc, _, i) => acc + clamp((now - STEP_AT[i]) / (STEP_AT[i + 1] - STEP_AT[i])), 0);
+  const current = done ? -1 : Math.min(STEPS.length - 1, Math.floor(fill));
 
   return (
-    <div ref={root} className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-10">
+    <div ref={root} className="grid grid-cols-1 items-center gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:gap-12">
       {/* The desktop: a text field with a cursor, the pill, the keys */}
-      <div aria-hidden="true" className="relative flex flex-col justify-center overflow-hidden rounded-2xl border border-edge bg-bg-2 p-5 sm:p-7">
+      <div aria-hidden="true" className="rounded-2xl border border-edge bg-bg-2 p-5 sm:p-7">
         <div className="rounded-xl border border-edge bg-card">
           <div className="flex items-center gap-2 border-b border-edge px-4 py-2.5 text-xs text-faint">
-            <span className="h-2 w-2 rounded-full bg-faint/60" />
-            <span className="h-2 w-2 rounded-full bg-faint/60" />
-            <span className="h-2 w-2 rounded-full bg-faint/60" />
+            <span className="h-2 w-2 rounded-full bg-faint/50" />
+            <span className="h-2 w-2 rounded-full bg-faint/50" />
+            <span className="h-2 w-2 rounded-full bg-faint/50" />
             <span className="ml-2">New message</span>
           </div>
-          <div className="space-y-2 px-4 py-3 text-sm">
-            <p className="text-faint">To: team@company.com</p>
-            <p className="text-faint">Subject: Q4 plan</p>
+          <div className="space-y-1.5 px-4 py-3 text-sm text-faint">
+            <p>To: team@company.com</p>
+            <p>Subject: Q4 plan</p>
           </div>
           <div className="min-h-[5.5rem] border-t border-edge px-4 py-4 text-base text-ink sm:text-lg">
             {SENTENCE.slice(0, typed)}
-            <span className={`ml-px inline-block h-[1.15em] w-[2px] translate-y-[3px] bg-cyan ${animated ? "animate-pulse" : ""}`} />
+            <span className="ml-px inline-block h-[1.15em] w-[2px] translate-y-[3px] animate-pulse bg-cyan" />
           </div>
         </div>
 
-        {/* Scribe's pill, floating over whatever app you are in */}
-        <div className="mt-5 flex min-h-[3.25rem] items-center justify-center">
+        <div className="mt-5 flex min-h-[3rem] items-center justify-center">
           <div
-            className={`flex max-w-full items-center gap-3 rounded-full border border-cyan/40 bg-bg/90 px-4 py-2 shadow-lg shadow-cyan/10 transition-opacity duration-300 ${pill ? "opacity-100" : "opacity-0"}`}
+            className={`flex max-w-full items-center gap-3 rounded-full border border-cyan/40 bg-bg/90 px-4 py-2 shadow-lg shadow-cyan/10 transition-[opacity,transform] duration-300 ${
+              pillShown ? "translate-y-0 opacity-100" : "translate-y-1 opacity-0"
+            }`}
           >
             <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-cyan shadow-[0_0_10px_var(--color-cyan)]" />
             <span className="flex h-5 items-center gap-[3px]">
@@ -150,20 +122,19 @@ export function DictationDemo() {
                   style={{
                     height: "100%",
                     background: "linear-gradient(180deg, var(--color-cyan), var(--color-purple))",
-                    animation: phase === "listen" ? `wave 900ms ease-in-out ${i * 80}ms infinite` : "none",
-                    transform: phase === "listen" ? undefined : "scaleY(0.35)",
+                    animation: keysDown ? `wave 900ms ease-in-out ${i * 80}ms infinite` : "none",
+                    transform: keysDown ? undefined : "scaleY(0.35)",
                   }}
                 />
               ))}
             </span>
             <span className="truncate text-sm text-mute">
-              {pill}
-              {heard > 0 && pill && <span className="text-ink">: {PHRASES.slice(0, heard).join(" ")}</span>}
+              {keysDown ? "Listening" : "Done"}
+              {heard > 0 && <span className="text-ink">: {PHRASES.slice(0, heard).join(" ")}</span>}
             </span>
           </div>
         </div>
 
-        {/* The hotkey */}
         <div className="mt-4 flex items-center justify-center gap-2 font-mono text-sm">
           {["Ctrl", "Win"].map((k, i) => (
             <span key={k} className="flex items-center gap-2">
@@ -171,8 +142,8 @@ export function DictationDemo() {
               <span
                 className={`rounded-lg border px-3 py-1.5 transition-all duration-150 ${
                   keysDown
-                    ? "translate-y-0.5 border-cyan/60 border-b bg-cyan/15 text-cyan"
-                    : "border-edge-strong border-b-4 bg-card text-ink"
+                    ? "translate-y-0.5 border-b border-cyan/60 bg-cyan/15 text-cyan"
+                    : "border-b-4 border-edge-strong bg-card text-ink"
                 }`}
               >
                 {k}
@@ -182,28 +153,29 @@ export function DictationDemo() {
         </div>
       </div>
 
-      {/* What the PC is doing */}
-      <ol className="flex flex-col gap-3">
+      {/* The steps, on a rail that fills as the loop goes */}
+      <ol className="relative">
+        <span aria-hidden="true" className="absolute top-7 bottom-7 left-[15px] w-[2px] rounded-full bg-edge" />
+        <span
+          aria-hidden="true"
+          className="absolute top-7 left-[15px] w-[2px] rounded-full bg-gradient-to-b from-cyan to-purple"
+          style={{ height: `calc((100% - 3.5rem) * ${fill / STEPS.length})` }}
+        />
         {STEPS.map((s, i) => {
-          const lit = !animated || i === stepIndex;
-          const done = animated && stepIndex > i;
+          const lit = done || i === current;
+          const reached = done || fill > i;
           return (
-            <li
-              key={s.title}
-              className={`relative rounded-2xl border p-5 transition-colors duration-300 ${
-                lit ? "border-cyan/45 bg-card-2" : "border-edge bg-card"
-              }`}
-            >
-              <div className="flex items-baseline gap-3">
-                <span
-                  className={`font-mono text-xs font-semibold tabular-nums ${lit || done ? "text-cyan" : "text-faint"}`}
-                >
-                  0{i + 1}
-                </span>
-                <div>
-                  <h3 className={`font-semibold ${lit ? "text-ink" : "text-mute"}`}>{s.title}</h3>
-                  <p className="mt-1 text-sm leading-relaxed text-mute">{s.body}</p>
-                </div>
+            <li key={s.title} className="relative flex gap-4 py-3.5">
+              <span
+                className={`relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border font-mono text-xs font-semibold transition-colors duration-500 ${
+                  reached ? "border-cyan/60 bg-bg-2 text-cyan" : "border-edge bg-bg text-faint"
+                }`}
+              >
+                {i + 1}
+              </span>
+              <div className={`transition-opacity duration-500 ${lit ? "opacity-100" : "opacity-55"}`}>
+                <h3 className="font-semibold text-ink">{s.title}</h3>
+                <p className="mt-0.5 text-sm leading-relaxed text-mute">{s.body}</p>
               </div>
             </li>
           );

@@ -12,14 +12,14 @@ export function Hero({ release, stars }: { release: Release; stars: number | nul
       <div className="text-center lg:text-left">
         <span className="inline-flex items-center gap-2 rounded-full border border-edge bg-card/70 px-3 py-1 text-sm text-mute">
           <span className="h-2 w-2 rounded-full bg-green shadow-[0_0_10px_var(--color-green)]" aria-hidden="true" />
-          Private dictation for Windows
+          Free speech-to-text for Windows
         </span>
         <h1 className="mt-6 text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl xl:text-7xl">
           Talk. <span className="gradient-text">It types.</span>
         </h1>
         <p className="mx-auto mt-5 max-w-xl text-lg text-mute sm:text-xl lg:mx-0">
-          Hold <Kbd>Ctrl</Kbd> + <Kbd>Win</Kbd>, speak, and let go. Your words land at the cursor in any app,
-          transcribed by whisper.cpp <span className="font-semibold text-ink">on your own PC</span>.
+          Hold <Kbd>Ctrl</Kbd> + <Kbd>Win</Kbd>, talk, and let go. Your words show up wherever you&apos;re typing.
+          It all runs <span className="font-semibold text-ink">on your PC</span>, so your voice never leaves it.
         </p>
 
         <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
@@ -47,7 +47,7 @@ export function Hero({ release, stars }: { release: Release; stars: number | nul
           <WindowsIcon />
           v{release.version} · {release.sizeMb} MB · Windows 10 and 11, 64-bit
         </p>
-        <p className="mt-1.5 text-sm text-faint">Free and open source (MIT) · no account · no telemetry</p>
+        <p className="mt-1.5 text-sm text-faint">Free and open source · no account · no tracking</p>
       </div>
 
       <DemoVideo

@@ -3,6 +3,8 @@ export const REPO = "n8watkins/scribe";
 export const GITHUB_URL = `https://github.com/${REPO}`;
 export const DOWNLOAD_URL = `${GITHUB_URL}/releases/latest`;
 export const N8BUILDS_URL = "https://n8builds.dev";
+export const KOFI_URL = "https://ko-fi.com/n8watkins";
+export const GITHUB_PROFILE_URL = "https://github.com/n8watkins";
 
 export type IconName = "lock" | "chip" | "clipboard" | "keyboard" | "pill" | "spark" | "history" | "shield";
 
@@ -46,56 +48,55 @@ export async function getRelease(): Promise<Release> {
   }
 }
 
-// Six, not eight: what you'd actually want to know before installing.
+// Six things worth knowing before you install, said plainly.
 export const FEATURES: Feature[] = [
-  { icon: "chip", title: "Runs on your PC", body: "whisper.cpp transcribes locally and keeps the model warm in memory, so text is ready the moment you let go." },
-  { icon: "keyboard", title: "Your hotkeys", body: "Hold Ctrl + Win to talk, or tap tilde to toggle hands-free. Rebind either one." },
-  { icon: "pill", title: "Live as you speak", body: "A small always-on-top pill shows it listening, and it transcribes phrase by phrase while you talk." },
-  { icon: "clipboard", title: "Any app, any field", body: "Words land at your cursor. Ctrl + Alt + V pastes your last transcript again." },
-  { icon: "history", title: "Searchable history", body: "Transcripts live in a local SQLite database you can search, clear, or switch off." },
-  { icon: "spark", title: "Optional extras", body: "AI note tools on a server you choose (LM Studio on your PC by default), and private GitHub backup. Both start off." },
+  { icon: "chip", title: "Fast", body: "The speech model stays loaded, so your text is there the moment you let go of the key." },
+  { icon: "keyboard", title: "Your keys", body: "Hold Ctrl + Win to talk, or tap ~ to talk hands-free. Change either one." },
+  { icon: "pill", title: "See it listening", body: "A small pill sits on top of your screen and shows what it hears as you talk." },
+  { icon: "clipboard", title: "Works in any app", body: "Email, Slack, Word, your code editor. Ctrl + Alt + V pastes your last one again." },
+  { icon: "history", title: "Find what you said", body: "Everything you dictate is saved on your PC to search later. Or turn history off." },
+  { icon: "spark", title: "Extras if you want them", body: "AI tools for your notes and a GitHub backup. Both are off until you turn them on." },
 ];
 
 export const FAQS: FaqItem[] = [
   {
     question: "Does Scribe send my voice to the cloud?",
     answer:
-      "No. Core dictation records and transcribes audio locally with whisper.cpp. Temporary audio is deleted after successful transcription. If transcription fails, Scribe can keep up to 20 recordings in its local failed-recordings folder so they can be recovered. Microphone audio is not uploaded for transcription.",
+      "No. Your voice is recorded and turned into text on your PC with whisper.cpp. The recording is deleted as soon as the text is ready. If something goes wrong, Scribe keeps the last 20 recordings on your PC so you can try them again.",
   },
   {
-    question: "Can I dictate without an internet connection?",
+    question: "Does it work without the internet?",
     answer:
-      "Yes, after you download a Whisper model. Core dictation then runs offline. Network access is still used for update checks, model downloads you start, GitHub authorization and backup when enabled, and any optional AI server you configure.",
+      "Yes. Once you've downloaded a speech model, dictation works offline. Scribe only goes online to check for updates, to download a model you pick, and for the GitHub backup or AI tools if you turn them on.",
   },
   {
-    question: "Where are my transcripts stored?",
+    question: "Where are my transcripts saved?",
     answer:
-      "History is stored in a local SQLite database under Scribe's Windows app-data folder. The Data & Privacy tab can open that folder, clear history, or disable history entirely.",
+      "In a small database in Scribe's app folder on your PC. From the settings you can open that folder, clear your history, or stop saving it at all.",
   },
   {
-    question: "What does optional GitHub backup upload?",
+    question: "What does the GitHub backup upload?",
     answer:
-      "GitHub backup is off by default. When you enable it, Scribe can save dictated notes as dated Markdown in a private repository you control, with a separate option to include every transcript. It does not upload microphone audio.",
+      "It's off unless you turn it on. When it's on, Scribe saves your notes as Markdown files in a private GitHub repo that you own, and your transcripts too if you choose. It never uploads audio.",
   },
   {
-    question: "How do the optional AI tools handle my text?",
+    question: "What happens to my text with the AI tools?",
     answer:
-      "Note analysis and selected-text transforms send the relevant text to the OpenAI-compatible server URL you choose. It defaults to LM Studio on your PC, but a remote URL sends the text to that remote service. These tools are optional and off by default. Core dictation does not need an LLM.",
+      "They're optional and off at first. When you use one, Scribe sends that text to the AI server you set. By default that's LM Studio running on your own PC; if you point it at an online service, the text goes there.",
   },
   {
-    question: "Do I need an account or subscription?",
+    question: "Do I need an account?",
     answer:
-      "No. Scribe is free and open source, and core dictation requires no account. A GitHub account is only needed if you choose to enable GitHub backup.",
+      "No. Scribe is free and open source, with no account and no subscription. You only need a GitHub account if you want the backup.",
   },
   {
-    question: "Which systems does Scribe support?",
-    answer:
-      "Scribe is built for 64-bit Windows 10 and Windows 11. macOS and Linux are not currently supported.",
+    question: "Does it work on Mac or Linux?",
+    answer: "Not right now. Scribe is made for 64-bit Windows 10 and 11.",
   },
   {
-    question: "Why might Windows SmartScreen show a warning?",
+    question: "Why does Windows warn me when I install it?",
     answer:
-      "The Windows installer is not Authenticode code-signed, so SmartScreen may label it as an unrecognized app. Download releases only from Scribe's official GitHub repository, where the source and release history are available for inspection.",
+      "The installer isn't code-signed yet, so Windows SmartScreen may call it an unrecognized app. Only download Scribe from its GitHub page, where you can see the code and every release.",
   },
 ];
 

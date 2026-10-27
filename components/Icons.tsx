@@ -88,3 +88,13 @@ export function WindowsIcon({ className = "h-4 w-4" }: { className?: string }) {
     </svg>
   );
 }
+
+/** Ko-fi's cup with a heart (fill: currentColor, so the caller sets Ko-fi's red). */
+export function KofiIcon({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={className}>
+      <path d="M4 6h13a4 4 0 0 1 0 8h-1.1A6 6 0 0 1 10 18H8a6 6 0 0 1-6-6V7a1 1 0 0 1 1-1Zm13 2v4a2 2 0 0 0 0-4Z" />
+      <path fill="#fff" d="M9.2 9.1c.8-.8 2.1-.8 2.9 0 .8.8.8 2.1 0 2.9L9.2 15l-2.9-3c-.8-.8-.8-2.1 0-2.9.8-.8 2.1-.8 2.9 0Z" transform="translate(.3 -.3)" />
+    </svg>
+  );
+}
