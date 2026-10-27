@@ -1,8 +1,10 @@
+import Link from "next/link";
 import Image from "next/image";
-import { FAQS, FEATURES, GITHUB_URL, N8BUILDS_URL, PRIVACY_POINTS, type Release } from "@/lib/site";
+import { FAQS, FEATURES, GITHUB_URL, N8BUILDS_URL, type Release } from "@/lib/site";
 import { DownloadIcon, GitHubIcon, Icon } from "@/components/Icons";
 import { DemoVideo } from "@/components/DemoVideo";
-import { Kbd } from "@/components/Kbd";
+import { DictationDemo } from "@/components/DictationDemo";
+import { Faq } from "@/components/Faq";
 
 const FOCUS = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan";
 
@@ -10,14 +12,14 @@ export function Nav({ release }: { release: Release }) {
   return (
     <nav aria-label="Primary" className="sticky top-0 z-50 border-b border-edge/70 bg-bg/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-6 py-3.5">
-        <a href="#top" className={`flex items-center gap-2.5 rounded-lg ${FOCUS}`}>
+        <Link href="/#top" className={`flex items-center gap-2.5 rounded-lg ${FOCUS}`}>
           <Image src="/scribe-icon.png" alt="" width={28} height={28} />
           <span className="font-bold tracking-tight">Scribe</span>
-        </a>
+        </Link>
         <div className="ml-auto hidden items-center gap-6 text-sm text-mute md:flex">
-          <a href="#features" className="transition hover:text-ink">Features</a>
-          <a href="#privacy" className="transition hover:text-ink">Privacy</a>
-          <a href="#faq" className="transition hover:text-ink">FAQ</a>
+          <Link href="/#how-it-works" className="transition hover:text-ink">How it works</Link>
+          <Link href="/#private-by-design" className="transition hover:text-ink">Private by design</Link>
+          <Link href="/#faq" className="transition hover:text-ink">FAQ</Link>
         </div>
         <div className="flex items-center gap-2 md:ml-3">
           <a
@@ -50,88 +52,130 @@ function SectionHead({ eyebrow, title, children }: { eyebrow: string; title: Rea
   );
 }
 
-/** Three steps, then what Scribe does, in six short cards. */
-export function Features() {
+/** The hotkey, the talking and the typing acted out, with what the PC does at each step. */
+export function HowItWorks() {
   return (
-    <section id="features" className="scroll-mt-16 border-y border-edge/60 bg-bg-2/40">
+    <section id="how-it-works" className="scroll-mt-16 border-y border-edge/60 bg-bg-2/40">
       <div className="mx-auto max-w-6xl px-6 py-20">
-        <SectionHead eyebrow="How it works" title={<>Three steps, <span className="gradient-text">no setup</span></>} />
-        <ol className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {[
-            ["Hold", <>Press and hold <Kbd>Ctrl</Kbd> + <Kbd>Win</Kbd> in any app, or tap <Kbd>~</Kbd> to go hands-free.</>],
-            ["Talk", <>whisper.cpp transcribes on your PC while you speak, phrase by phrase.</>],
-            ["Let go", <>The text is typed where your cursor is. Nothing to copy or paste.</>],
-          ].map(([title, body], i) => (
-            <li key={String(title)} className="flex gap-4 rounded-2xl border border-edge bg-card p-5">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-cyan to-purple font-mono font-bold text-bg">
-                {i + 1}
-              </span>
-              <div>
-                <h3 className="font-semibold text-ink">{title}</h3>
-                <p className="mt-1 text-sm leading-relaxed text-mute">{body}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {FEATURES.map((f) => (
-            <div key={f.title} className="rounded-2xl border border-edge bg-card p-5 transition hover:border-cyan/40 hover:bg-card-2">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan/25 bg-cyan/10 text-cyan">
-                <Icon name={f.icon} />
-              </span>
-              <h3 className="mt-4 font-semibold text-ink">{f.title}</h3>
-              <p className="mt-1.5 text-sm leading-relaxed text-mute">{f.body}</p>
-            </div>
-          ))}
+        <SectionHead eyebrow="How it works" title={<>Hold the key. Talk. <span className="gradient-text">Let go.</span></>}>
+          No window to switch to and nothing to paste. This is the whole loop, and what your PC does at each step.
+        </SectionHead>
+        <div className="mt-12">
+          <DictationDemo />
         </div>
       </div>
     </section>
   );
 }
 
-export function Privacy() {
+/** What else it does, in six short cards. */
+export function Features() {
   return (
-    <section id="privacy" className="mx-auto max-w-6xl scroll-mt-16 px-6 py-20">
-      <SectionHead eyebrow="Privacy" title={<>Local means <span className="gradient-text">your PC does the work</span></>}>
-        The whole dictation path runs on your machine, and you can see every step of it.
-      </SectionHead>
-
-      <ol aria-label="Where your voice goes" className="mt-10 grid grid-cols-1 overflow-hidden rounded-2xl border border-edge bg-card sm:grid-cols-4">
-        {[
-          ["Microphone", "Captures your speech"],
-          ["Temporary audio", "Deleted after a successful result"],
-          ["whisper.cpp", "Transcribes on this PC"],
-          ["Your cursor", "Gets the finished text"],
-        ].map(([title, body], index) => (
-          <li key={title} className="relative border-b border-edge p-5 last:border-b-0 sm:border-r sm:border-b-0 sm:last:border-r-0">
-            <div className="flex items-center gap-3">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cyan/10 font-mono text-sm font-bold text-cyan">{index + 1}</span>
-              <span className="font-semibold text-ink">{title}</span>
-            </div>
-            <p className="mt-2 pl-11 text-sm text-mute">{body}</p>
-            {index < 3 && <span aria-hidden="true" className="absolute -right-2.5 top-1/2 z-10 hidden h-5 w-5 -translate-y-1/2 rotate-45 border-r border-t border-edge bg-card sm:block" />}
-          </li>
-        ))}
-      </ol>
-
-      <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
-        {PRIVACY_POINTS.map((point) => (
-          <article key={point.title} className="rounded-2xl border border-edge bg-card p-6">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-green/30 bg-green/10 text-green">
-              <Icon name={point.icon} />
+    <section id="features" className="mx-auto max-w-6xl scroll-mt-16 px-6 py-20">
+      <SectionHead eyebrow="Features" title="Built for dictating all day" />
+      <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {FEATURES.map((f) => (
+          <div key={f.title} className="rounded-2xl border border-edge bg-card p-5 transition hover:border-cyan/40 hover:bg-card-2">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan/25 bg-cyan/10 text-cyan">
+              <Icon name={f.icon} />
             </span>
-            <h3 className="mt-4 font-semibold text-ink">{point.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed text-mute">{point.body}</p>
-          </article>
+            <h3 className="mt-4 font-semibold text-ink">{f.title}</h3>
+            <p className="mt-1.5 text-sm leading-relaxed text-mute">{f.body}</p>
+          </div>
         ))}
       </div>
+    </section>
+  );
+}
 
-      <p className="mt-6 rounded-2xl border border-purple/30 bg-purple/5 p-5 text-sm leading-relaxed text-mute">
-        <span className="font-semibold text-ink">What can use the network?</span> Model downloads you start, update
-        checks, GitHub sign-in and backup if you turn them on, and the optional AI tools, which go to the server URL you
-        set. Your audio never does.
-      </p>
+// Every connection the app makes, from its source (see the repo's
+// src-tauri: update_check.rs, model_manager.rs, github_backup.rs,
+// note_analysis.rs, whisper_server.rs, state_server.rs).
+const CONNECTIONS: { to: string; when: string; sends: string }[] = [
+  {
+    to: "github.com/n8watkins/scribe",
+    when: "When Scribe starts, to check for an update",
+    sends: "A request for the latest version. Updates install only if they carry Scribe's signature.",
+  },
+  {
+    to: "huggingface.co (whisper.cpp models)",
+    when: "Only when you download a model",
+    sends: "A download request for that model file, at a pinned version.",
+  },
+  {
+    to: "github.com and api.github.com",
+    when: "Only if you turn on GitHub backup",
+    sends: "Your notes (and transcripts, if you choose) as Markdown, to a private repo you own. Never audio.",
+  },
+  {
+    to: "Your AI server, 127.0.0.1:1234 by default",
+    when: "Only when you use the optional AI note tools",
+    sends: "The text you ask it to work on. The default is LM Studio on your own PC.",
+  },
+];
+
+export function PrivateByDesign() {
+  return (
+    <section id="private-by-design" className="scroll-mt-16 border-y border-edge/60 bg-bg-2/40">
+      <div className="mx-auto max-w-6xl px-6 py-20">
+        <SectionHead eyebrow="Private by design" title={<>Your voice <span className="gradient-text">never leaves your PC</span></>}>
+          Not as a promise, as a design: there is no Scribe server for it to go to.
+        </SectionHead>
+
+        <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+          <div className="rounded-2xl border border-green/30 bg-green/[0.04] p-6">
+            <h3 className="flex items-center gap-2.5 font-semibold text-ink">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-green/15 text-green">
+                <Icon name="lock" className="h-4 w-4" />
+              </span>
+              Stays on this PC, always
+            </h3>
+            <ul className="mt-5 space-y-4 text-sm leading-relaxed text-mute">
+              <li>
+                <span className="font-semibold text-ink">Your audio.</span> Recorded to a temporary file, transcribed
+                here, and deleted as soon as the text is ready. If a transcription fails, the last 20 recordings are
+                kept locally so you can retry them.
+              </li>
+              <li>
+                <span className="font-semibold text-ink">The model.</span> whisper.cpp runs as a server bound to
+                127.0.0.1, so nothing else on your network can reach it.
+              </li>
+              <li>
+                <span className="font-semibold text-ink">Your history.</span> A SQLite file in your Windows app-data
+                folder. Search it, clear it, switch it off, or open the folder from Scribe&apos;s settings.
+              </li>
+              <li>
+                <span className="font-semibold text-ink">How you use it.</span> No account, no analytics, no
+                telemetry. The usage stats Scribe shows you are worked out and kept on your PC, never sent.
+              </li>
+            </ul>
+          </div>
+
+          <div className="rounded-2xl border border-edge bg-card p-6">
+            <h3 className="font-semibold text-ink">Every connection it makes</h3>
+            <p className="mt-1 text-sm text-mute">The complete list, from the app&apos;s source.</p>
+            <dl className="mt-5 divide-y divide-edge">
+              {CONNECTIONS.map((c) => (
+                <div key={c.to} className="grid grid-cols-1 gap-1 py-4 first:pt-0 last:pb-0 sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] sm:gap-4">
+                  <dt>
+                    <span className="block font-mono text-[0.8rem] text-cyan">{c.to}</span>
+                    <span className="mt-1 block text-xs text-faint">{c.when}</span>
+                  </dt>
+                  <dd className="text-sm leading-relaxed text-mute">{c.sends}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </div>
+
+        <p className="mt-6 text-center text-sm text-mute">
+          Don&apos;t take this page&apos;s word for it:{" "}
+          <a href={GITHUB_URL} className="font-semibold text-cyan underline decoration-cyan/40 underline-offset-4 transition hover:text-ink">
+            the source is open
+          </a>{" "}
+          (MIT), and every network call lives in a handful of files.
+        </p>
+      </div>
     </section>
   );
 }
@@ -139,7 +183,7 @@ export function Privacy() {
 /** The full tour, and the privacy story, as the app's own recordings (controls, no autoplay). */
 export function VideoShowcase() {
   return (
-    <section id="see-it" className="border-y border-edge/60 bg-bg-2/40">
+    <section id="see-it">
       <div className="mx-auto max-w-6xl px-6 py-20">
         <SectionHead eyebrow="See it" title={<>The full tour, <span className="gradient-text">in 30 seconds</span></>} />
         <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -165,17 +209,7 @@ export function FAQ() {
   return (
     <section id="faq" className="mx-auto max-w-3xl scroll-mt-16 px-6 py-20">
       <SectionHead eyebrow="FAQ" title="Straight answers" />
-      <div className="mt-10 space-y-3">
-        {FAQS.map((item) => (
-          <details key={item.question} className="group rounded-2xl border border-edge bg-card open:border-cyan/40 open:bg-card-2">
-            <summary className={`flex cursor-pointer list-none items-center justify-between gap-4 rounded-2xl px-6 py-5 font-semibold text-ink marker:content-none ${FOCUS}`}>
-              {item.question}
-              <span aria-hidden="true" className="text-xl font-normal text-cyan transition-transform group-open:rotate-45">+</span>
-            </summary>
-            <p className="px-6 pb-6 pr-14 leading-relaxed text-mute">{item.answer}</p>
-          </details>
-        ))}
-      </div>
+      <Faq items={FAQS} />
     </section>
   );
 }
@@ -209,19 +243,77 @@ export function CTA({ release }: { release: Release }) {
   );
 }
 
-export function Footer() {
+export function Footer({ release }: { release: Release }) {
+  const col = "text-sm text-mute transition hover:text-ink";
+  const columns: { title: string; links: { label: string; href: string }[] }[] = [
+    {
+      title: "Scribe",
+      links: [
+        { label: "How it works", href: "/#how-it-works" },
+        { label: "Features", href: "/#features" },
+        { label: "Private by design", href: "/#private-by-design" },
+        { label: "FAQ", href: "/#faq" },
+      ],
+    },
+    {
+      title: "Get it",
+      links: [
+        { label: `Download v${release.version}`, href: release.url },
+        { label: "All releases", href: `${GITHUB_URL}/releases` },
+        { label: "Checksums", href: release.checksumsUrl },
+        { label: "Source code", href: GITHUB_URL },
+      ],
+    },
+    {
+      title: "n8builds.dev",
+      links: [
+        { label: "The Lab", href: `${N8BUILDS_URL}/#lab` },
+        { label: "How Scribe was built", href: `${N8BUILDS_URL}/builds/scribe` },
+        { label: "Build log", href: `${N8BUILDS_URL}/builds` },
+        { label: "Developer portfolio", href: "https://portfolio.n8builds.dev" },
+      ],
+    },
+  ];
   return (
     <footer className="border-t border-edge/60">
-      <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 py-10 text-sm text-faint sm:flex-row">
-        <div className="flex items-center gap-2">
-          <Image src="/scribe-icon.png" alt="" width={22} height={22} />
-          <span>Scribe, private local dictation for Windows</span>
+      <div className="mx-auto grid max-w-6xl grid-cols-2 gap-x-6 gap-y-10 px-6 py-14 md:grid-cols-[minmax(0,1.2fr)_repeat(3,minmax(0,1fr))]">
+        <div className="col-span-2 md:col-span-1">
+          <Link href="/#top" className={`flex w-fit items-center gap-2.5 rounded-lg ${FOCUS}`}>
+            <Image src="/scribe-icon.png" alt="" width={28} height={28} />
+            <span className="font-bold tracking-tight text-ink">Scribe</span>
+          </Link>
+          <p className="mt-3 max-w-xs text-sm text-mute">
+            Private local dictation for Windows. One of the tools I build in public on{" "}
+            <a href={N8BUILDS_URL} className="text-ink underline decoration-faint/50 underline-offset-2 hover:text-cyan">
+              n8builds.dev
+            </a>
+            .
+          </p>
         </div>
-        <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-          <a href="#privacy" className="transition hover:text-ink">Privacy</a>
-          <a href="#faq" className="transition hover:text-ink">FAQ</a>
-          <a href={GITHUB_URL} className="transition hover:text-ink">GitHub</a>
-          <a href={N8BUILDS_URL + "/builds/scribe"} className="transition hover:text-cyan">How it was built, on n8builds.dev ↗</a>
+        {columns.map((c) => (
+          <nav key={c.title} aria-label={c.title}>
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink">{c.title}</p>
+            <ul className="mt-4 space-y-2.5">
+              {c.links.map((l) => (
+                <li key={l.label}>
+                  <a href={l.href} className={col}>
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
+      </div>
+      <div className="border-t border-edge/60">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-6 text-sm text-faint sm:flex-row">
+          <p>© 2026 Nathan Watkins. Scribe is MIT licensed.</p>
+          <p className="text-center">
+            This site sets no cookies and runs no analytics.{" "}
+            <Link href="/privacy" className="text-mute underline decoration-faint/50 underline-offset-2 hover:text-ink">
+              Privacy policy
+            </Link>
+          </p>
         </div>
       </div>
     </footer>

@@ -8,8 +8,6 @@ export type IconName = "lock" | "chip" | "clipboard" | "keyboard" | "pill" | "sp
 
 export type Feature = { icon: IconName; title: string; body: string };
 
-export type PrivacyPoint = { icon: IconName; title: string; body: string };
-
 export type FaqItem = { question: string; answer: string };
 
 /** The latest Windows release, read from GitHub at build time (hourly). */
@@ -56,24 +54,6 @@ export const FEATURES: Feature[] = [
   { icon: "clipboard", title: "Any app, any field", body: "Words land at your cursor. Ctrl + Alt + V pastes your last transcript again." },
   { icon: "history", title: "Searchable history", body: "Transcripts live in a local SQLite database you can search, clear, or switch off." },
   { icon: "spark", title: "Optional extras", body: "AI note tools on a server you choose (LM Studio on your PC by default), and private GitHub backup. Both start off." },
-];
-
-export const PRIVACY_POINTS: PrivacyPoint[] = [
-  {
-    icon: "lock",
-    title: "Voice stays local",
-    body: "Scribe transcribes temporary audio on your PC, then deletes it after success. If transcription fails, up to 20 recordings can be kept locally for recovery.",
-  },
-  {
-    icon: "history",
-    title: "History is yours",
-    body: "Transcripts are stored in a local SQLite database. You can disable history, clear it, or open the data folder yourself.",
-  },
-  {
-    icon: "shield",
-    title: "No tracking layer",
-    body: "Core dictation needs no account, subscription, analytics, or telemetry service. Product usage is not sent to a Scribe tracking service.",
-  },
 ];
 
 export const FAQS: FaqItem[] = [

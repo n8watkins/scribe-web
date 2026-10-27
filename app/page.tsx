@@ -1,5 +1,5 @@
 import { Hero } from "@/components/Hero";
-import { CTA, FAQ, Features, Footer, Nav, Privacy, VideoShowcase } from "@/components/Sections";
+import { CTA, FAQ, Features, Footer, HowItWorks, Nav, PrivateByDesign, VideoShowcase } from "@/components/Sections";
 import { getRelease, getStarCount, SITE_URL } from "@/lib/site";
 
 export default async function Home() {
@@ -23,13 +23,14 @@ export default async function Home() {
       <Nav release={release} />
       <main id="top">
         <Hero release={release} stars={stars} />
+        <HowItWorks />
         <Features />
-        <Privacy />
+        <PrivateByDesign />
         <VideoShowcase />
         <FAQ />
         <CTA release={release} />
       </main>
-      <Footer />
+      <Footer release={release} />
     </>
   );
 }
