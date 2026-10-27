@@ -5,16 +5,20 @@ import { Icon } from "@/components/Icons";
 import type { IconName } from "@/lib/site";
 
 /**
- * One local-AI example, played once when it comes into view: what you say
- * types out, the AI thinks for a moment, then what you get types in and
- * stays. Every line is laid out (invisibly) from the first paint, so nothing
- * moves while it plays. Under reduced motion it shows finished.
+ * One local-AI example that plays like a looping GIF while it's on screen:
+ * what you say types out, the AI thinks for a moment, what you get types in,
+ * it holds, then clears and plays again. `startDelay` staggers two examples so
+ * they never play in step. Every line is laid out (invisibly) from the first
+ * paint, so nothing moves while it plays. Under reduced motion it shows
+ * finished and stays still.
  */
 type Phase = "idle" | "say" | "think" | "get" | "done";
 
 const SAY_MS = 38;
 const GET_MS = 14;
 const THINK_MS = 1100;
+/** How long the finished example stays up before it plays again. */
+const HOLD_MS = 4200;
 
 function Typed({ text, count, caret }: { text: string; count: number | null; caret: boolean }) {
   if (count === null) return <>{text}</>;
@@ -54,40 +58,58 @@ export function AIExample({
   say,
   get,
   bullets = [],
+  startDelay = 0,
 }: {
-  title: string;
-  how: React.ReactNode;
+  /** Optional heading inside the card (the page sections carry their own). */
+  title?: string;
+  how?: React.ReactNode;
   context?: string;
   sayLabel: string;
   say: string;
   get: string;
   bullets?: string[];
+  startDelay?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [phase, setPhase] = useState<Phase>("idle");
   const [n, setN] = useState(0);
+  const [visible, setVisible] = useState(false);
+  const started = useRef(false);
   const getLines = [get, ...bullets];
   const getTotal = getLines.reduce((sum, line) => sum + line.length, 0);
 
-  // Start once it's mostly in view; finished at once under reduced motion.
+  // Plays only while mostly in view (it pauses where it is when scrolled
+  // away); finished and still under reduced motion.
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return setPhase("done");
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        io.disconnect();
-        setPhase("say");
-      },
-      { threshold: 0.55 }
-    );
+    const io = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: 0.55 });
     io.observe(el);
     return () => io.disconnect();
   }, []);
 
-  // Step through the phases: type, think, type, done.
+  // The first time it's seen, start after its stagger. It only counts as
+  // started once it really starts, so scrolling past it doesn't strand it.
   useEffect(() => {
+    if (!visible || started.current) return;
+    const t = window.setTimeout(() => {
+      started.current = true;
+      setPhase("say");
+    }, startDelay);
+    return () => window.clearTimeout(t);
+  }, [visible, startDelay]);
+
+  // Step through the phases: type, think, type, hold, and round again.
+  useEffect(() => {
+    if (!visible) return;
+    if (phase === "done" && started.current) {
+      const t = window.setTimeout(() => {
+        setN(0);
+        setPhase("say");
+      }, HOLD_MS);
+      return () => window.clearTimeout(t);
+    }
     if (phase === "say" || phase === "get") {
       const total = phase === "say" ? say.length : getTotal;
       if (n >= total) {
@@ -104,7 +126,7 @@ export function AIExample({
       const t = window.setTimeout(() => setPhase("get"), THINK_MS);
       return () => window.clearTimeout(t);
     }
-  }, [phase, n, say.length, getTotal]);
+  }, [phase, n, say.length, getTotal, visible]);
 
   const sayCount = phase === "idle" ? 0 : phase === "say" ? n : null;
   // Characters shown for each get line, filling them in order.
@@ -119,9 +141,9 @@ export function AIExample({
 
   return (
     <div ref={ref} className="rounded-2xl border border-edge bg-card/60 p-5 sm:p-6">
-      <p className="font-semibold text-ink">{title}</p>
-      <p className="mt-1 text-sm text-mute">{how}</p>
-      <div className="mt-5 space-y-3">
+      {title && <p className="font-semibold text-ink">{title}</p>}
+      {how && <p className="mt-1 text-sm text-mute">{how}</p>}
+      <div className={`space-y-3 ${title || how ? "mt-5" : ""}`}>
         {context && (
           <Box label="Selected" icon="file" tone="context">
             <span className="text-mute">{context}</span>

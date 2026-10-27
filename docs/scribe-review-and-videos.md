@@ -46,3 +46,9 @@ Rules for every future video, Scribe or not:
 - No em dashes anywhere: on screen, in captions, in titles.
 - Every claim checked against the app's source before rendering (the Google Drive line got through because it wasn't).
 - Show the real app where possible; mockups only where a recording can't show it, and scaled to fill the frame.
+
+## Update (2026-10-27, round 8)
+
+The Remotion sources are fixed (n8builds-promo commit 6e952ee): no em dashes, the GitHub backup instead of the false Google Drive claim, a plainer local-AI line, and the dictation scene scaled up to fill the 1920x1080 frame.
+Scribe-15a, 15b and 30a were re-rendered; the hero now uses the new 15a (0.57 MB for the web, no zoom needed).
+These are still mockups: the plan above to record the real app on Windows stands, and the old GIF exports in the Windows videos folder predate this fix.

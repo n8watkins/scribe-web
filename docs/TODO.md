@@ -7,8 +7,8 @@ The full app assessment plan is in the app repo: `docs/ASSESSMENT_PLAN_2026-10.m
 
 - [ ] Owner approves the reworked page (desktop), then a phone-size pass (375), then a PR to scribe-web and a deploy.
   Vercel's free plan allows 100 deploys per rolling 24 hours across the whole account; check there's room first.
-- [ ] Redo all four videos (see `scribe-review-and-videos.md`): real recordings, no em dashes, every claim checked against the app.
-  Then replace the hero video, drop its 1.25x zoom, and bring back a tour section.
+- [x] Fix the Remotion videos' em dashes and false claims, scale them to fill the frame, and use the new 15a in the hero without the zoom (2026-10-27).
+- [ ] Redo the videos as real recordings of the app on Windows (see `scribe-review-and-videos.md`), then bring back a tour section.
 - [ ] Real screenshots from Windows (taken during the assessment) to replace the drawn previews: every theme including a custom one, the Models screen, the pill's three styles, History, a note with its AI summary, the rewrite-selection flow.
 - [ ] A "What's new" page fed from the app's GitHub releases (see release notes below).
 - [ ] `/privacy` returns 404 on the live site until this branch is deployed.

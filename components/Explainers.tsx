@@ -1,4 +1,23 @@
-import { CheckIcon, GitHubIcon, Icon } from "@/components/Icons";
+import {
+  BarChart3,
+  BookA,
+  CalendarClock,
+  ClipboardPaste,
+  Combine,
+  FileAudio,
+  FileDown,
+  FolderGit2,
+  Hand,
+  Languages,
+  NotebookPen,
+  Power,
+  Replace,
+  Scissors,
+  Search,
+  Timer,
+  type LucideIcon,
+} from "lucide-react";
+import { GitHubIcon, Icon } from "@/components/Icons";
 import { AIExample } from "@/components/AIExample";
 import { ThemePreview } from "@/components/ThemePreview";
 import { GITHUB_URL, type IconName } from "@/lib/site";
@@ -118,43 +137,74 @@ export function PrivacyFlow() {
   );
 }
 
+/** The words beside an example: eyebrow, title, a line, then any extras. */
+function SplitCopy({ eyebrow, title, line, children }: { eyebrow: string; title: React.ReactNode; line: React.ReactNode; children?: React.ReactNode }) {
+  return (
+    <div data-reveal>
+      <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan">{eyebrow}</p>
+      <h2 className="mt-3 text-balance text-3xl font-bold tracking-tight sm:text-4xl">{title}</h2>
+      <p className="mt-4 text-pretty leading-relaxed text-mute">{line}</p>
+      {children}
+    </div>
+  );
+}
+
+// Two sections, one per local-AI tool, each with an example that loops like a
+// GIF while it's on screen; the second starts later so the two never play in step.
 export function LocalAI() {
   return (
-    <section id="local-ai" className="mx-auto max-w-5xl scroll-mt-20 px-6 py-20">
-      <Head
-        eyebrow="Optional"
-        title={<>Rewrite with an AI <span className="gradient-text">on your PC</span></>}
-        line={
-          <>
-            Scribe can hand text to LM Studio or Ollama, free apps that run AI models on your own computer. Install one, turn
-            the AI tools on in Scribe, and these work. Until then they stay off.
-          </>
-        }
-      />
-
-      <div data-reveal className="mx-auto mt-12 max-w-3xl space-y-6">
-        <AIExample
-          title="Rewrite selected text, in any app"
-          how={
+    <>
+      <section id="local-ai" className="mx-auto grid max-w-6xl scroll-mt-20 items-center gap-10 px-6 py-20 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+        <SplitCopy
+          eyebrow="Optional · local AI"
+          title={<>Rewrite anything <span className="gradient-text">you highlight</span></>}
+          line={
             <>
-              Highlight it, press <span className="font-mono text-ink">Ctrl + Alt + R</span> and say what to change.
+              Select text in any app, press <span className="font-mono text-ink">Ctrl + Alt + R</span> and say what to change. Scribe
+              swaps in the rewrite and puts your clipboard back.
             </>
           }
-          context="hey so i think we should push the launch, screenshots arent done and the copy needs another pass"
-          sayLabel="You say"
-          say="Make this clear and professional."
-          get="Let's move the launch date. The screenshots aren't finished, and the copy needs one more review."
-        />
-        <AIExample
-          title="Sum up a note"
-          how="One click on any note gives a summary and its to-dos. You can change what it asks for."
-          sayLabel="Your note"
-          say="ok so tomorrow I need to send Maya the new timeline, go over the homepage copy, and um book the dentist before Friday"
-          get="Plans for tomorrow."
-          bullets={["Send Maya the new timeline", "Review the homepage copy", "Book the dentist before Friday"]}
-        />
-      </div>
-    </section>
+        >
+          <div className="mt-6 rounded-xl border border-edge bg-card/60 p-4 text-sm leading-relaxed text-mute">
+            <p className="flex items-center gap-2 font-semibold text-ink">
+              <Icon name="chip" className="h-4 w-4 text-cyan" />
+              The AI runs on your PC too
+            </p>
+            <p className="mt-1.5">
+              Scribe hands the text to LM Studio or Ollama, free apps that run AI models on your own computer. Install one and turn
+              the AI tools on in Scribe; until then they stay off.
+            </p>
+          </div>
+        </SplitCopy>
+        <div data-reveal>
+          <AIExample
+            context="hey so i think we should push the launch, screenshots arent done and the copy needs another pass"
+            sayLabel="You say"
+            say="Make this clear and professional."
+            get="Let's move the launch date. The screenshots aren't finished, and the copy needs one more review."
+          />
+        </div>
+      </section>
+
+      <section id="note-summaries" className="scroll-mt-20 border-y border-edge/60 bg-bg-2/40">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-20 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+          <div data-reveal className="md:order-first">
+            <AIExample
+              sayLabel="Your note"
+              say="ok so tomorrow I need to send Maya the new timeline, go over the homepage copy, and um book the dentist before Friday"
+              get="Plans for tomorrow."
+              bullets={["Send Maya the new timeline", "Review the homepage copy", "Book the dentist before Friday"]}
+              startDelay={2400}
+            />
+          </div>
+          <SplitCopy
+            eyebrow="Optional · local AI"
+            title={<>Turn a ramble into <span className="gradient-text">a to-do list</span></>}
+            line="Dictate a quick note, then one click gives you a summary and its action items. You can change what it asks for, and it uses the same AI on your PC."
+          />
+        </div>
+      </section>
+    </>
   );
 }
 
@@ -171,7 +221,7 @@ const MODELS: { name: string; size: string; mb: number; langs: string; isDefault
 
 export function Models() {
   return (
-    <section id="models" className="scroll-mt-20 border-y border-edge/60 bg-bg-2/40">
+    <section id="models" className="scroll-mt-20">
       <div className="mx-auto max-w-5xl px-6 py-20">
         <Head
           eyebrow="Models"
@@ -217,87 +267,82 @@ export function Models() {
 
 export function Themes() {
   return (
-    <section id="themes" className="mx-auto max-w-5xl scroll-mt-20 px-6 py-20">
-      <Head eyebrow="Make it yours" title={<>Your colours, <span className="gradient-text">your Scribe</span></>} line="Six themes built in, including a light one. Try them here." />
-      <div data-reveal className="mt-10">
-        <ThemePreview />
+    <section id="themes" className="scroll-mt-20 border-y border-edge/60 bg-bg-2/40">
+      <div className="mx-auto max-w-5xl px-6 py-20">
+        <Head eyebrow="Make it yours" title={<>Your colours, <span className="gradient-text">your Scribe</span></>} line="Six themes built in, including a light one. Try them here." />
+        <div data-reveal className="mt-10">
+          <ThemePreview />
+        </div>
+        <p className="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center text-sm text-mute">
+          <span className="flex -space-x-1" aria-hidden="true">
+            {["#f472b6", "#facc15", "#34d399", "#60a5fa", "#f8fafc"].map((c) => (
+              <span key={c} className="h-4 w-4 rounded-full ring-2 ring-bg" style={{ background: c }} />
+            ))}
+          </span>
+          Or make your own: pick five colours in Scribe and it builds the rest of the theme.
+        </p>
       </div>
-      <p className="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center text-sm text-mute">
-        <span className="flex -space-x-1" aria-hidden="true">
-          {["#f472b6", "#facc15", "#34d399", "#60a5fa", "#f8fafc"].map((c) => (
-            <span key={c} className="h-4 w-4 rounded-full ring-2 ring-bg" style={{ background: c }} />
-          ))}
-        </span>
-        Or make your own: pick five colours in Scribe and it builds the rest of the theme.
-      </p>
     </section>
   );
 }
 
-// Everything else the free app does, each checked against its source.
-const MORE: { group: string; icon: IconName; items: string[] }[] = [
+// Everything else the free app does, each checked against its source: one
+// icon per feature (lucide, the app's own icon set), four to a group.
+const MORE: { group: string; items: { Icon: LucideIcon; text: string }[] }[] = [
   {
     group: "Dictation",
-    icon: "mic",
     items: [
-      "Hands-free mode on the ~ key",
-      "Quick notes: hold ~ and tap Q",
-      "Stops by itself after a minute of silence",
-      "Ctrl + Alt + V pastes your last one again",
-      "Ctrl + Alt + X throws a take away",
+      { Icon: Hand, text: "Hands-free on the ~ key" },
+      { Icon: NotebookPen, text: "Quick notes: hold ~, tap Q" },
+      { Icon: Timer, text: "Stops after a minute of silence" },
+      { Icon: ClipboardPaste, text: "Ctrl + Alt + V pastes the last one" },
     ],
   },
   {
     group: "Your words",
-    icon: "spark",
     items: [
-      "Your own word list for names and jargon",
-      "Replacements: say \u201cmy email\u201d, get your address",
-      "Leaves out \u201cum\u201d and \u201cuh\u201d if you like",
-      "29 languages, or translate any of them to English",
-      "Turns audio and video files into text",
+      { Icon: BookA, text: "A word list for names and jargon" },
+      { Icon: Replace, text: "Say \u201cmy email\u201d, get your address" },
+      { Icon: Scissors, text: "Leaves out \u201cum\u201d and \u201cuh\u201d" },
+      { Icon: Languages, text: "29 languages, or into English" },
     ],
   },
   {
     group: "History and notes",
-    icon: "history",
     items: [
-      "Search, filter and play back everything you said",
-      "Combine entries, or open them in your editor",
-      "Stats: words today, speed and latency",
-      "Keep it 30 days, forever, or not at all",
+      { Icon: Search, text: "Search and play back what you said" },
+      { Icon: Combine, text: "Combine entries, open in your editor" },
+      { Icon: BarChart3, text: "Words, speed and latency stats" },
+      { Icon: CalendarClock, text: "Keep 30 days, forever, or nothing" },
     ],
   },
   {
     group: "Your setup",
-    icon: "keyboard",
     items: [
-      "Change any shortcut",
-      "A floating pill you can move and recolour",
-      "Back up to a private GitHub repo",
-      "Export to Markdown, CSV or JSON",
-      "Lives in the tray; starts with Windows if you want",
+      { Icon: FileAudio, text: "Audio and video files into text" },
+      { Icon: FolderGit2, text: "Backup to a private GitHub repo" },
+      { Icon: FileDown, text: "Export Markdown, CSV or JSON" },
+      { Icon: Power, text: "Lives in the tray, starts with Windows" },
     ],
   },
 ];
 
 export function More() {
   return (
-    <section id="features" className="scroll-mt-20 border-t border-edge/60">
-      <div className="mx-auto max-w-5xl px-6 py-20">
+    <section id="features" className="scroll-mt-20">
+      <div className="mx-auto max-w-6xl px-6 py-20">
         <Head eyebrow="And the rest" title={<>More than <span className="gradient-text">dictation</span></>} line="All of it in the free app, all of it on your PC." />
-        <div data-reveal className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div data-reveal className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {MORE.map((g) => (
             <div key={g.group} className="rounded-2xl border border-edge bg-card/60 p-5 transition duration-300 hover:border-cyan/40 hover:bg-card">
-              <p className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-cyan">
-                <Icon name={g.icon} className="h-4 w-4" />
-                {g.group}
-              </p>
-              <ul className="mt-4 space-y-2.5">
-                {g.items.map((item) => (
-                  <li key={item} className="flex items-start gap-2.5 text-[0.95rem] text-ink">
-                    <CheckIcon className="mt-1 h-4 w-4 shrink-0 text-green" />
-                    {item}
+              <p className="font-mono text-xs uppercase tracking-wider text-cyan">{g.group}</p>
+              <ul className="mt-4 space-y-3">
+                {g.items.map(({ Icon: ItemIcon, text }) => (
+                  <li key={text} className="group/item flex items-center gap-3 text-sm leading-snug text-ink">
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-cyan/20 bg-cyan/[0.08] text-cyan transition group-hover/item:scale-105 group-hover/item:bg-cyan/15">
+                      <ItemIcon className="h-4 w-4" aria-hidden="true" />
+                    </span>
+                    {text}
                   </li>
                 ))}
               </ul>
