@@ -139,7 +139,7 @@ export function FAQ() {
 
 export function CTA({ release }: { release: Release }) {
   return (
-    <section className="sep-glow mx-auto max-w-4xl px-6 py-24 text-center">
+    <section className="mx-auto max-w-4xl px-6 py-24 text-center">
       <div data-reveal className="rounded-3xl border border-edge bg-gradient-to-br from-cyan/10 via-card to-purple/10 px-6 py-12">
         <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
           Give it a try. <span className="gradient-text">It&apos;s free.</span>

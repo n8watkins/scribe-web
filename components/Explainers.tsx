@@ -79,7 +79,7 @@ const ONLINE: { icon: IconName; what: string; when: string }[] = [
 
 export function PrivacyFlow() {
   return (
-    <section id="private-by-design" className="sep-glow scroll-mt-20">
+    <section id="private-by-design" className="scroll-mt-20">
       <div className="mx-auto max-w-5xl px-6 py-20">
         <Head eyebrow="Private by design" title={<>Your voice stays <span className="gradient-text">on your PC</span></>} />
 
@@ -197,19 +197,19 @@ export function LocalAI() {
 
 // The Whisper models in the app's catalog (models.rs), smallest first, with the
 // sizes the app shows.
-const MODELS: { name: string; size: string; isDefault?: boolean }[] = [
-  { name: "Tiny", size: "75 MiB" },
-  { name: "Base", size: "142 MiB" },
-  { name: "Small, compressed", size: "181 MiB", isDefault: true },
-  { name: "Small", size: "466 MiB" },
-  { name: "Large v3 Turbo, compressed", size: "547 MiB" },
-  { name: "Medium", size: "1.5 GiB" },
-  { name: "Large v3 Turbo", size: "1.6 GiB" },
+const MODELS: { name: string; size: string; mib: number; isDefault?: boolean }[] = [
+  { name: "Tiny", size: "75 MiB", mib: 75 },
+  { name: "Base", size: "142 MiB", mib: 142 },
+  { name: "Small, compressed", size: "181 MiB", mib: 181, isDefault: true },
+  { name: "Small", size: "466 MiB", mib: 466 },
+  { name: "Large v3 Turbo, compressed", size: "547 MiB", mib: 547 },
+  { name: "Medium", size: "1.5 GiB", mib: 1536 },
+  { name: "Large v3 Turbo", size: "1.6 GiB", mib: 1638 },
 ];
 
 export function Models() {
   return (
-    <section id="models" className="sep-glow scroll-mt-20">
+    <section id="models" className="scroll-mt-20">
       <div className="mx-auto max-w-4xl px-6 py-16">
         <Head
           eyebrow="Models"
@@ -233,27 +233,39 @@ export function Models() {
             whisper.cpp
           </span>
         </div>
-        <div data-reveal className="mx-auto mt-6 max-w-3xl">
-          <ul className="flex flex-wrap justify-center gap-2">
+        <div data-reveal className="mx-auto mt-6 max-w-3xl rounded-2xl border border-edge bg-card/60 px-5 py-4">
+          <div className="grid grid-cols-[minmax(0,9.5rem)_minmax(0,1fr)] gap-3 sm:grid-cols-[minmax(0,12rem)_minmax(0,1fr)]" aria-hidden="true">
+            <span className="hidden sm:block" />
+            <span className="col-span-2 flex items-center gap-2 whitespace-nowrap text-[0.7rem] sm:col-span-1 font-semibold uppercase tracking-wider text-faint">
+              <span>Faster</span>
+              <span className="h-px flex-1 bg-gradient-to-r from-cyan/60 to-purple/60" />
+              <span>More accurate</span>
+            </span>
+          </div>
+          <p className="sr-only">The models run from faster to more accurate in the order listed.</p>
+          <ul className="mt-2 space-y-0.5">
             {MODELS.map((m) => (
               <li
                 key={m.name}
-                className={`rounded-full border px-3.5 py-1.5 text-sm ${
-                  m.isDefault ? "border-cyan/50 bg-cyan/10 text-ink" : "border-edge bg-card/70 text-mute"
-                }`}
+                className="-mx-2 grid grid-cols-[minmax(0,9.5rem)_minmax(0,1fr)] items-center gap-3 rounded-lg px-2 py-1 transition hover:bg-white/[0.03] sm:grid-cols-[minmax(0,12rem)_minmax(0,1fr)]"
               >
-                <span className="font-semibold text-ink">{m.name}</span>
-                <span className="ml-2 tabular-nums text-faint">{m.size}</span>
-                {m.isDefault && <span className="ml-2 text-xs font-semibold text-cyan">Starts here</span>}
+                <span className="text-sm font-semibold leading-tight text-ink">
+                  {m.name}
+                  {m.isDefault && <span className="mt-1 block w-fit rounded-full bg-cyan/15 px-2 py-0.5 text-[0.7rem] font-semibold text-cyan sm:hidden">Starts here</span>}
+                </span>
+                <span className="flex items-center gap-3">
+                  <span
+                    className={`block h-2 shrink-0 rounded-full ${m.isDefault ? "bg-gradient-to-r from-cyan to-purple" : "bg-edge-strong"}`}
+                    style={{ width: `${Math.max(4, (m.mib / 1638) * 100) * 0.55}%` }}
+                  />
+                  <span className="shrink-0 text-xs tabular-nums text-mute">{m.size}</span>
+                  {m.isDefault && (
+                    <span className="hidden shrink-0 rounded-full bg-cyan/15 px-2 py-0.5 text-[0.7rem] font-semibold text-cyan sm:inline">Starts here</span>
+                  )}
+                </span>
               </li>
             ))}
           </ul>
-          <div className="mt-4 flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-faint" aria-hidden="true">
-            <span>Faster</span>
-            <span className="h-px flex-1 bg-gradient-to-r from-cyan/60 to-purple/60" />
-            <span>More accurate</span>
-          </div>
-          <p className="sr-only">The models run from faster to more accurate in the order listed.</p>
         </div>
         <p className="mt-6 text-center text-sm text-mute">
           Most come in English-only and multilingual builds. 29 languages, or let it detect yours; any of them can come out as English text.
@@ -265,7 +277,7 @@ export function Models() {
 
 export function Themes() {
   return (
-    <section id="themes" className="sep-glow sep-band scroll-mt-20">
+    <section id="themes" className="sep-band scroll-mt-20">
       <div className="mx-auto max-w-5xl px-6 py-16">
         <Head eyebrow="Make it yours" title={<>Your colours, <span className="gradient-text">your Scribe</span></>} line="Six themes built in, including a light one. Watch a tour of the app, or pick a theme to try." />
         <div data-reveal className="mt-10">
@@ -359,7 +371,7 @@ const ALSO: { Icon: LucideIcon; text: string }[] = [
 export function More() {
   return (
     <>
-      <section id="features" className="sep-glow scroll-mt-20">
+      <section id="features" className="scroll-mt-20">
         <div className="mx-auto max-w-6xl px-6 py-20">
           <Head eyebrow="And the rest" title={<>More than <span className="gradient-text">dictation</span></>} line="All of it in the free app, all of it on your PC." />
           <div data-reveal className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
