@@ -30,8 +30,6 @@ export type IconName =
   | "monitor"
   | "globe";
 
-export type Feature = { icon: IconName; title: string; body: string };
-
 /** An answer can end with one link, shown as a button (the Mac and Linux request). */
 export type FaqItem = { question: string; answer: string; link?: { label: string; href: string } };
 
@@ -70,63 +68,6 @@ export async function getRelease(): Promise<Release> {
     return FALLBACK_RELEASE;
   }
 }
-
-// The six things that matter most, said plainly (checked against the app's
-// source; see docs/scribe-review-and-videos.md for the full review to come).
-export const FEATURES: Feature[] = [
-  { icon: "keyboard", title: "Works in any app", body: "Hold Ctrl + Win, talk, let go, and the text lands at your cursor. Your clipboard is left as it was." },
-  { icon: "pill", title: "Text while you talk", body: "Phrases turn into text as you speak, so the words are there the moment you let go." },
-  { icon: "file", title: "Quick notes", body: "Hold the ~ key and tap Q to dictate a note. It is saved to your Notes instead of pasted." },
-  { icon: "spark", title: "Rewrite anything", body: "Highlight text in any app, press Ctrl + Alt + R and say what to change. A local AI rewrites it in place." },
-  { icon: "globe", title: "Your language", body: "Pick from 29 languages or let it detect yours, and turn any of them into English text." },
-  { icon: "history", title: "Everything you said", body: "Search it, filter it by date, play it back, and see your stats. All on your PC." },
-];
-
-/** Everything else it does, grouped, one short line each. */
-export const EXTRAS: { group: string; items: string[] }[] = [
-  {
-    group: "Dictation",
-    items: [
-      "Hands-free mode on the ~ key",
-      "Every hotkey can be changed",
-      "Stops by itself after a minute of silence",
-      "Ctrl + Alt + V pastes your last one again",
-      "A floating pill you can move and recolour",
-    ],
-  },
-  {
-    group: "Models and speed",
-    items: [
-      "11 Whisper models, from 78 MB to 1.6 GB",
-      "Runs on your graphics card, or the CPU",
-      "Transcribe audio and video files too",
-    ],
-  },
-  {
-    group: "Cleaner text",
-    items: [
-      "A dictionary for names and jargon",
-      "Replacements: say \u201cmy email\u201d, get your address",
-      "Leave out \u201cum\u201d and \u201cuh\u201d if you like",
-    ],
-  },
-  {
-    group: "History and notes",
-    items: [
-      "Combine entries, or open them in your editor",
-      "Keep them 30 days, forever, or not at all",
-      "AI summaries and action items for notes",
-    ],
-  },
-  {
-    group: "Backup and export",
-    items: ["Back up to a private GitHub repo", "Export to Markdown, CSV or JSON", "Restore from an export"],
-  },
-  {
-    group: "Look and feel",
-    items: ["Seven themes, a light one, or your own colours", "Lives in the tray, out of your way", "Starts with Windows if you want"],
-  },
-];
 
 export const FAQS: FaqItem[] = [
   {
@@ -170,10 +111,10 @@ export const FAQS: FaqItem[] = [
       "No. Scribe is free and open source, with no account and no subscription. You only need a GitHub account if you want the backup.",
   },
   {
-    question: "Does it work on Mac or Linux?",
+    question: "Want it on Mac or Linux?",
     answer:
-      "Not yet. Scribe is made for 64-bit Windows 10 and 11. If you'd use it on a Mac or on Linux, ask for it on GitHub: the requests decide where it goes next.",
-    link: { label: "Ask for Mac or Linux", href: MAC_LINUX_REQUEST_URL },
+      "Scribe is Windows-only for now (64-bit Windows 10 and 11). Open a request on GitHub and say which system you use. The requests decide what comes next.",
+    link: { label: "Open a request", href: MAC_LINUX_REQUEST_URL },
   },
   {
     question: "Why does Windows warn me when I install it?",

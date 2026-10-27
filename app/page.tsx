@@ -1,5 +1,6 @@
 import { Hero } from "@/components/Hero";
-import { CTA, FAQ, Features, Footer, HowItWorks, Nav, PrivateByDesign, VideoShowcase } from "@/components/Sections";
+import { CTA, FAQ, Footer, HowItWorks, Nav } from "@/components/Sections";
+import { LocalAI, Models, More, PrivacyFlow, Themes } from "@/components/Explainers";
 import { getRelease, getStarCount, SITE_URL } from "@/lib/site";
 
 export default async function Home() {
@@ -24,9 +25,11 @@ export default async function Home() {
       <main id="top">
         <Hero release={release} stars={stars} />
         <HowItWorks />
-        <Features />
-        <PrivateByDesign />
-        <VideoShowcase />
+        <PrivacyFlow />
+        <LocalAI />
+        <Models />
+        <Themes />
+        <More />
         <FAQ />
         <CTA release={release} />
       </main>

@@ -1,4 +1,4 @@
-import { GITHUB_URL, type Release } from "@/lib/site";
+import { GITHUB_URL, MAC_LINUX_REQUEST_URL, type Release } from "@/lib/site";
 import { DownloadIcon, GitHubIcon, WindowsIcon } from "@/components/Icons";
 import { DemoVideo } from "@/components/DemoVideo";
 import { Kbd } from "@/components/Kbd";
@@ -48,6 +48,12 @@ export function Hero({ release, stars }: { release: Release; stars: number | nul
           v{release.version} · {release.sizeMb} MB · Windows 10 and 11, 64-bit
         </p>
         <p className="mt-1.5 text-sm text-faint">Free and open source · no account · no tracking</p>
+        <p className="mt-1.5 text-sm text-faint">
+          On a Mac or Linux?{" "}
+          <a href={MAC_LINUX_REQUEST_URL} className="text-mute underline decoration-faint/50 underline-offset-2 transition hover:text-ink">
+            Ask for it
+          </a>
+        </p>
       </div>
 
       <DemoVideo

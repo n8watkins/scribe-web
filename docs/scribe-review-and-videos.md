@@ -37,3 +37,12 @@ Plan:
 2. Rebuild the Remotion compositions around those recordings, with copy checked against the app (no em dashes, nothing the app doesn't do), and the content scaled to fill the frame.
 3. Replace the hero video and the two tour videos, then drop the 1.25x zoom in `components/Hero.tsx`.
 4. Re-check the posters (`public/posters`) and the share card.
+
+## Decision (2026-10-27)
+
+All four Scribe videos will be redone.
+Rules for every future video, Scribe or not:
+
+- No em dashes anywhere: on screen, in captions, in titles.
+- Every claim checked against the app's source before rendering (the Google Drive line got through because it wasn't).
+- Show the real app where possible; mockups only where a recording can't show it, and scaled to fill the frame.
