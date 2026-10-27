@@ -1,110 +1,60 @@
-"use client";
+import { GITHUB_URL, type Release } from "@/lib/site";
+import { DownloadIcon, GitHubIcon, WindowsIcon } from "@/components/Icons";
+import { DemoVideo } from "@/components/DemoVideo";
+import { Kbd } from "@/components/Kbd";
 
-import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
-import { DOWNLOAD_URL, GITHUB_URL } from "@/lib/site";
-
-const PHRASE = "Hold a key, speak, and Scribe types it right where your cursor is.";
-
-function Waveform() {
+// The hero says it in one line, then shows it: the real 15-second demo
+// (muted and looping, playing on its own unless reduced motion is asked for),
+// beside the download with its real version and size from the latest release.
+export function Hero({ release, stars }: { release: Release; stars: number | null }) {
   return (
-    <div className="flex items-center gap-[3px] h-6">
-      {Array.from({ length: 16 }).map((_, i) => (
-        <span
-          key={i}
-          className="w-[3px] rounded-full bg-cyan"
-          style={{
-            height: "100%",
-            transformOrigin: "center",
-            animation: `wave 900ms ease-in-out ${i * 70}ms infinite`,
-            background: "linear-gradient(180deg, var(--color-cyan), var(--color-purple))",
-          }}
-        />
-      ))}
-    </div>
-  );
-}
+    <section className="relative mx-auto grid max-w-6xl items-center gap-12 px-6 pt-14 pb-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:pt-24">
+      <div className="text-center lg:text-left">
+        <span className="inline-flex items-center gap-2 rounded-full border border-edge bg-card/70 px-3 py-1 text-sm text-mute">
+          <span className="h-2 w-2 rounded-full bg-green shadow-[0_0_10px_var(--color-green)]" aria-hidden="true" />
+          Private dictation for Windows
+        </span>
+        <h1 className="mt-6 text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl xl:text-7xl">
+          Talk. <span className="gradient-text">It types.</span>
+        </h1>
+        <p className="mx-auto mt-5 max-w-xl text-lg text-mute sm:text-xl lg:mx-0">
+          Hold <Kbd>Ctrl</Kbd> + <Kbd>Win</Kbd>, speak, and let go. Your words land at the cursor in any app,
+          transcribed by whisper.cpp <span className="font-semibold text-ink">on your own PC</span>.
+        </p>
 
-function TypeOut() {
-  const [n, setN] = useState(0);
-  const ref = useRef(0);
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      ref.current = PHRASE.length;
-      setN(PHRASE.length);
-      return;
-    }
-
-    const id = setInterval(() => {
-      ref.current = Math.min(PHRASE.length, ref.current + 1);
-      setN(ref.current);
-      if (ref.current >= PHRASE.length) clearInterval(id);
-    }, 38);
-    return () => clearInterval(id);
-  }, []);
-  return (
-    <span aria-label={PHRASE}>
-      <span aria-hidden="true" className="hidden motion-reduce:inline">
-        {PHRASE}
-      </span>
-      <span aria-hidden="true" className="motion-reduce:hidden">
-        {PHRASE.slice(0, n)}
-        <span className="inline-block w-[2px] h-[1.1em] translate-y-[3px] bg-cyan animate-pulse" />
-      </span>
-    </span>
-  );
-}
-
-export function Hero({ stars }: { stars: number | null }) {
-  return (
-    <section className="relative mx-auto max-w-5xl px-6 pt-20 pb-16 text-center">
-      <div className="flex justify-center mb-8">
-        <Image src="/scribe-icon.png" alt="Scribe" width={88} height={88} priority className="drop-shadow-[0_8px_40px_rgba(34,211,238,0.35)]" />
-      </div>
-
-      <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.02]">
-        Talk. <span className="gradient-text">It types.</span>
-      </h1>
-      <p className="mt-5 text-lg sm:text-xl text-mute max-w-2xl mx-auto">
-        Private local dictation for Windows. Hold a key, speak, and release. The
-        text lands at your cursor, while your voice <span className="text-ink font-semibold">stays on your PC</span>.
-      </p>
-
-      {/* live dictation mock */}
-      <div className="mt-10 mx-auto max-w-2xl rounded-2xl border border-edge bg-card/80 backdrop-blur p-5 text-left shadow-2xl">
-        <div className="flex items-center gap-3 mb-4">
-          <span className="inline-flex items-center gap-3 rounded-full border border-cyan/40 bg-bg-2/80 px-4 py-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-cyan shadow-[0_0_12px_var(--color-cyan)]" />
-            <Waveform />
-            <span className="text-sm text-mute">Listening · local</span>
-          </span>
-          <span className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-green/40 bg-green/10 px-3 py-1.5 text-xs text-green">
-            🔒 on-device
-          </span>
+        <div className="mt-9 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start">
+          <a
+            href={release.url}
+            className="inline-flex items-center gap-2.5 whitespace-nowrap rounded-full bg-gradient-to-r from-cyan to-purple px-7 py-3.5 font-semibold text-bg shadow-lg shadow-cyan/20 transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+          >
+            <DownloadIcon />
+            Download for Windows
+          </a>
+          <a
+            href={GITHUB_URL}
+            className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-edge-strong bg-card px-6 py-3.5 font-semibold text-ink transition hover:border-cyan/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan"
+          >
+            <GitHubIcon />
+            Source on GitHub
+            {stars != null && stars >= 10 && (
+              <span className="rounded-full bg-bg-2 px-2 py-0.5 text-sm tabular-nums text-mute">
+                ★ {stars.toLocaleString()}
+              </span>
+            )}
+          </a>
         </div>
-        <div className="font-mono text-base sm:text-lg text-ink min-h-[3.5em]">
-          <TypeOut />
-        </div>
+        <p className="mt-5 flex items-center justify-center gap-2 text-sm text-faint lg:justify-start">
+          <WindowsIcon />
+          v{release.version} · {release.sizeMb} MB · Windows 10 and 11, 64-bit
+        </p>
+        <p className="mt-1.5 text-sm text-faint">Free and open source (MIT) · no account · no telemetry</p>
       </div>
 
-      <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-        <a
-          href={GITHUB_URL}
-          className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan to-purple px-6 py-3 font-semibold text-bg shadow-lg shadow-cyan/20 transition hover:brightness-110"
-        >
-          ⭐ Star on GitHub
-          {stars != null && (
-            <span className="ml-1 rounded-full bg-bg/25 px-2 py-0.5 text-sm tabular-nums">{stars.toLocaleString()}</span>
-          )}
-        </a>
-        <a
-          href={DOWNLOAD_URL}
-          className="inline-flex items-center gap-2 rounded-full border border-edge-strong bg-card px-6 py-3 font-semibold text-ink transition hover:border-cyan/60"
-        >
-          ↓ Download for Windows
-        </a>
-      </div>
-      <p className="mt-4 text-sm text-faint">Free and open source · no account · no telemetry</p>
+      <DemoVideo
+        src="/videos/Scribe-15a.mp4"
+        poster="/posters/scribe-15a.webp"
+        label="Scribe in 15 seconds: hold Ctrl + Win, talk, and the words appear at the cursor"
+      />
     </section>
   );
 }

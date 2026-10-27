@@ -4,42 +4,73 @@ export const GITHUB_URL = `https://github.com/${REPO}`;
 export const DOWNLOAD_URL = `${GITHUB_URL}/releases/latest`;
 export const N8BUILDS_URL = "https://n8builds.dev";
 
-export type Feature = { icon: string; title: string; body: string };
+export type IconName = "lock" | "chip" | "clipboard" | "keyboard" | "pill" | "spark" | "history" | "shield";
 
-export type PrivacyPoint = { icon: string; title: string; body: string };
+export type Feature = { icon: IconName; title: string; body: string };
+
+export type PrivacyPoint = { icon: IconName; title: string; body: string };
 
 export type FaqItem = { question: string; answer: string };
 
-export const FEATURES: Feature[] = [
-  { icon: "🔒", title: "100% local", body: "Local Whisper models transcribe on your machine. Your audio never leaves your PC." },
-  { icon: "🧠", title: "Model picker", body: "Choose the Whisper model that fits your hardware. Favor speed, accuracy, or a balance of both." },
-  { icon: "📋", title: "Paste anywhere", body: "Ctrl+Alt+V drops your last transcript without consuming the keyboard." },
-  { icon: "⌨️", title: "Rebindable hotkeys", body: "Push-to-talk (Ctrl+Win) or toggle (tilde). Bind the keys you want." },
-  { icon: "🤖", title: "Optional AI tools", body: "Use an OpenAI-compatible server for note analysis and selected-text transforms. The default points to LM Studio on your PC." },
-  { icon: "☁️", title: "Private GitHub backup", body: "Optionally sync notes and transcripts to a private repository you control." },
-  { icon: "📌", title: "Floating pill", body: "A tiny status pill shows when Scribe is listening, live and incremental." },
-  { icon: "🆓", title: "Free and open", body: "No account, no subscription, and no telemetry. The source is available on GitHub." },
-];
+/** The latest Windows release, read from GitHub at build time (hourly). */
+export type Release = { version: string; url: string; sizeMb: number; checksumsUrl: string };
 
-export const STEPS: { n: string; title: string; body: string }[] = [
-  { n: "1", title: "Hold the key", body: "Press and hold Ctrl + Win (or toggle with tilde) anywhere in Windows." },
-  { n: "2", title: "Speak", body: "A local Whisper model transcribes in real time. Nothing is uploaded for transcription." },
-  { n: "3", title: "It types", body: "Release, and the text lands right where your cursor is. Any app." },
+// Used when GitHub can't be reached at build time: the release live on 2026-10-27.
+const FALLBACK_RELEASE: Release = {
+  version: "0.8.0",
+  url: `${GITHUB_URL}/releases/download/v0.8.0/Scribe_0.8.0_x64-setup.exe`,
+  sizeMb: 12,
+  checksumsUrl: `${GITHUB_URL}/releases/download/v0.8.0/SHA256SUMS.txt`,
+};
+
+export async function getRelease(): Promise<Release> {
+  try {
+    const res = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`, {
+      headers: { Accept: "application/vnd.github+json" },
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return FALLBACK_RELEASE;
+    const data = (await res.json()) as {
+      tag_name?: string;
+      assets?: { name: string; size: number; browser_download_url: string }[];
+    };
+    const setup = data.assets?.find((asset) => /x64-setup\.exe$/.test(asset.name));
+    const sums = data.assets?.find((asset) => asset.name === "SHA256SUMS.txt");
+    if (!data.tag_name || !setup) return FALLBACK_RELEASE;
+    return {
+      version: data.tag_name.replace(/^v/, ""),
+      url: setup.browser_download_url,
+      sizeMb: Math.round(setup.size / 1_000_000),
+      checksumsUrl: sums?.browser_download_url ?? DOWNLOAD_URL,
+    };
+  } catch {
+    return FALLBACK_RELEASE;
+  }
+}
+
+// Six, not eight: what you'd actually want to know before installing.
+export const FEATURES: Feature[] = [
+  { icon: "chip", title: "Runs on your PC", body: "whisper.cpp transcribes locally and keeps the model warm in memory, so text is ready the moment you let go." },
+  { icon: "keyboard", title: "Your hotkeys", body: "Hold Ctrl + Win to talk, or tap tilde to toggle hands-free. Rebind either one." },
+  { icon: "pill", title: "Live as you speak", body: "A small always-on-top pill shows it listening, and it transcribes phrase by phrase while you talk." },
+  { icon: "clipboard", title: "Any app, any field", body: "Words land at your cursor. Ctrl + Alt + V pastes your last transcript again." },
+  { icon: "history", title: "Searchable history", body: "Transcripts live in a local SQLite database you can search, clear, or switch off." },
+  { icon: "spark", title: "Optional extras", body: "AI note tools on a server you choose (LM Studio on your PC by default), and private GitHub backup. Both start off." },
 ];
 
 export const PRIVACY_POINTS: PrivacyPoint[] = [
   {
-    icon: "🎙️",
+    icon: "lock",
     title: "Voice stays local",
     body: "Scribe transcribes temporary audio on your PC, then deletes it after success. If transcription fails, up to 20 recordings can be kept locally for recovery.",
   },
   {
-    icon: "🗃️",
+    icon: "history",
     title: "History is yours",
     body: "Transcripts are stored in a local SQLite database. You can disable history, clear it, or open the data folder yourself.",
   },
   {
-    icon: "🚫",
+    icon: "shield",
     title: "No tracking layer",
     body: "Core dictation needs no account, subscription, analytics, or telemetry service. Product usage is not sent to a Scribe tracking service.",
   },

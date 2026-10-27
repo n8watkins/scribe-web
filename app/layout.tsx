@@ -1,17 +1,22 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
+// Self-hosted at build time (next/font), so the CSP's font-src 'self' holds.
+const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" });
+
 const TITLE = "Scribe - Private local dictation for Windows";
 const DESC =
-  "Hold a key, speak, and Scribe types at your cursor. Local Whisper keeps " +
-  "your voice on your PC. Free, open source, and built for Windows.";
+  "Hold Ctrl + Win, speak, and let go: Scribe types at your cursor in any app. " +
+  "whisper.cpp transcribes on your own PC. Free, open source, no account.";
 
 export const metadata: Metadata = {
   title: TITLE,
   description: DESC,
   metadataBase: new URL(SITE_URL),
   alternates: { canonical: "/" },
+  icons: { icon: "/scribe-icon.png", apple: "/scribe-icon.png" },
   openGraph: {
     title: TITLE,
     description: DESC,
@@ -19,12 +24,12 @@ export const metadata: Metadata = {
     siteName: "Scribe",
     url: "/",
   },
-  twitter: { card: "summary", title: TITLE, description: DESC },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESC },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={inter.variable}>
       <body className="min-h-screen antialiased">{children}</body>
     </html>
   );
