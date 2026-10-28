@@ -1,23 +1,22 @@
 # Scribe: what's left to do
 
-Kept current as of 2026-10-27.
+Kept current as of 2026-10-27 (evening).
 The full app assessment plan is in the app repo: `docs/ASSESSMENT_PLAN_2026-10.md`.
 
 ## Website (scribe.n8builds.dev)
 
-- [ ] Owner approves the reworked page (desktop), then a phone-size pass (375), then a PR to scribe-web and a deploy.
-  Vercel's free plan allows 100 deploys per rolling 24 hours across the whole account; check there's room first.
+- [x] The reworked page is live (scribe-web #11, 2026-10-27); checked at 375px in Chromium and WebKit with no horizontal scroll.
+- [ ] On phones the app tour ("Make it yours") renders at about a third of its size, so its text is unreadable; give phones a cropped view or a still.
 - [x] Fix the Remotion videos' em dashes and false claims, scale them to fill the frame, and use the new 15a in the hero without the zoom (2026-10-27).
 - [ ] Redo the videos as real recordings of the app on Windows (see `scribe-review-and-videos.md`), then bring back a tour section.
 - [ ] Real screenshots from Windows (taken during the assessment) to replace the drawn previews: every theme including a custom one, the Models screen, the pill's three styles, History, a note with its AI summary, the rewrite-selection flow.
 - [ ] A "What's new" page fed from the app's GitHub releases (see release notes below).
-- [ ] `/privacy` returns 404 on the live site until this branch is deployed.
 
 ## The app (Scribe)
 
 - [ ] Run the full assessment (code, security, UI and UX, reliability, release notes) in a fresh session.
-- [ ] Cut the next release: 13 commits on `main` since v0.8.0.
-- [ ] Release notes: adopt release-kit, and bring `CHANGELOG.md` up to date (it stops at 0.6.0; releases are at v0.8.0).
+- [ ] Cut the next release (the owner's go-ahead): the security fixes from scribe #40 reach users only with a release.
+- [x] Release notes: release-kit adopted in the app (scribe #42); the next release generates the notes and changelog.
 - [ ] Code signing for the installer (needs a certificate), so Windows stops warning people.
 - [ ] Findings so far, for the assessment to confirm:
   - the "type it out" paste fallback exists in code but has no setting in the app;
