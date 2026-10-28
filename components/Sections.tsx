@@ -79,6 +79,7 @@ export function Nav({ release, stars }: { release: Release; stars: number | null
           <Link href="/#how-it-works" className="transition hover:text-ink">How it works</Link>
           <Link href="/#private-by-design" className="transition hover:text-ink">Private by design</Link>
           <Link href="/#faq" className="transition hover:text-ink">FAQ</Link>
+          <Link href="/whats-new" className="transition hover:text-ink">What&apos;s new</Link>
         </div>
         <div className="ml-auto flex items-center gap-2 lg:ml-4">
           <span className="hidden md:block">
@@ -178,6 +179,7 @@ export function Footer({ release }: { release: Release }) {
         { label: "Local AI", href: "/#local-ai" },
         { label: "Models", href: "/#models" },
         { label: "FAQ", href: "/#faq" },
+        { label: "What's new", href: "/whats-new" },
       ],
     },
     {

@@ -36,12 +36,12 @@ export type FaqItem = { question: string; answer: string; link?: { label: string
 /** The latest Windows release, read from GitHub at build time (hourly). */
 export type Release = { version: string; url: string; sizeMb: number; checksumsUrl: string };
 
-// Used when GitHub can't be reached at build time: the release live on 2026-10-27.
+// Used when GitHub can't be reached at build time: the release live on 2026-10-28.
 const FALLBACK_RELEASE: Release = {
-  version: "0.8.0",
-  url: `${GITHUB_URL}/releases/download/v0.8.0/Scribe_0.8.0_x64-setup.exe`,
-  sizeMb: 12,
-  checksumsUrl: `${GITHUB_URL}/releases/download/v0.8.0/SHA256SUMS.txt`,
+  version: "0.9.0",
+  url: `${GITHUB_URL}/releases/download/v0.9.0/Scribe_0.9.0_x64-setup.exe`,
+  sizeMb: 13,
+  checksumsUrl: `${GITHUB_URL}/releases/download/v0.9.0/SHA256SUMS.txt`,
 };
 
 export async function getRelease(): Promise<Release> {
