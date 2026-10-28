@@ -15,7 +15,7 @@
   --color-purple: #8b5cf6;
   --color-green: #22c55e;
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+  --font-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
     Helvetica, Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Fira Code", Menlo,
     Consolas, monospace;
@@ -65,4 +65,131 @@ body {
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Scrollbar in Scribe's colours */
+html {
+  scrollbar-color: rgba(34, 211, 238, 0.35) var(--color-bg);
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+::-webkit-scrollbar-thumb {
+  border: 2px solid var(--color-bg);
+  border-radius: 999px;
+  background: linear-gradient(var(--color-cyan), var(--color-purple));
+  opacity: 0.6;
+}
+
+/* Sections rise in as they come into view (components/Reveal.tsx marks them).
+   Only with scripting on and motion allowed, so nothing stays hidden otherwise. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  [data-reveal]:not([data-shown]) {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  [data-reveal] {
+    transition:
+      opacity 600ms ease-out,
+      transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+}
+
+/* Private by design: your voice travels mic -> model -> cursor, on a loop.
+   Each step lights in turn; the dot runs along the arrow between them. */
+@keyframes flow-glow {
+  0%, 100% { border-color: var(--color-edge); box-shadow: none; }
+  8%, 26% { border-color: rgba(34, 197, 94, 0.55); box-shadow: 0 0 24px rgba(34, 197, 94, 0.18); }
+  34% { border-color: var(--color-edge); box-shadow: none; }
+}
+@keyframes flow-dot-x {
+  0% { left: 0; opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { left: calc(100% - 6px); opacity: 0; }
+}
+@keyframes flow-dot-y {
+  0% { top: 0; opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { top: calc(100% - 6px); opacity: 0; }
+}
+.flow-node {
+  animation: flow-glow 4.5s ease-in-out infinite;
+}
+
+/* The hero video's placeholder sweep */
+@keyframes sweep {
+  from { background-position: 100% 0; }
+  to { background-position: -100% 0; }
+}
+
+/* The hero comes in on load: each part rises in turn (--d is its delay).
+   Under reduced motion the global rule above cuts it to an instant. */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+.rise {
+  animation: rise 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+
+/* Private by design: each step's icon moves while its step is lit */
+@keyframes icon-pop {
+  0%, 34%, 100% { transform: none; }
+  12% { transform: scale(1.18); }
+  22% { transform: scale(1); }
+}
+@keyframes mic-ring {
+  0% { transform: scale(0.8); opacity: 0.6; }
+  30%, 100% { transform: scale(1.9); opacity: 0; }
+}
+.flow-node .flow-icon {
+  animation: icon-pop 4.5s ease-in-out infinite;
+  animation-delay: inherit;
+}
+.flow-node .flow-ring {
+  animation: mic-ring 4.5s ease-out infinite;
+  animation-delay: inherit;
+}
+
+/* The privacy loop waits for its section to come into view (Reveal sets data-shown). */
+@media (scripting: enabled) {
+  [data-reveal]:not([data-shown]) .flow-node,
+  [data-reveal]:not([data-shown]) .flow-node *,
+  [data-reveal]:not([data-shown]) .flow-dot {
+    animation-play-state: paused;
+  }
+}
+
+/* Section separations: one system. Every section opens with the same glowing
+   hairline (cyan to purple, fading at both ends); every other section also
+   sits on a flat raised tone. No angles, arcs or fades, so nothing fights
+   the page's gradients. */
+.sep-glow {
+  position: relative;
+}
+.sep-glow::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(64rem, 86%);
+  height: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.55), rgba(139, 92, 246, 0.55), transparent);
+  box-shadow: 0 0 18px 1px rgba(34, 211, 238, 0.25);
+}
+.sep-band {
+  background: rgba(10, 16, 32, 0.78);
+}
+
+/* A phrase landing in the editor demo */
+@keyframes land {
+  from { opacity: 0; filter: blur(2px); }
+  to { opacity: 1; filter: none; }
 }
