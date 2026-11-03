@@ -3,7 +3,10 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
 // The share card (1200x630), drawn at build time: the icon, the line, the
-// facts, in the site's navy and cyan-to-purple.
+// facts, in the site's navy and cyan-to-purple. The static export renders it
+// once into out/opengraph-image, so the icon is read from disk only during
+// the build and nothing runs when the image is served.
+export const dynamic = "force-static";
 export const alt = "Scribe: Talk. It types. Free speech-to-text for Windows.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";

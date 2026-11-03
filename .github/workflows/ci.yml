@@ -41,3 +41,7 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      # Validates wrangler.jsonc and the out/ assets without uploading anything.
+      - name: Check the Cloudflare deploy
+        run: npm run check:deploy

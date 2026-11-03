@@ -3,10 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 7694",
+    "dev": "next dev --turbopack -p 7694",
     "build": "next build",
-    "start": "next start -p 7694",
-    "lint": "eslint . --max-warnings=0"
+    "lint": "eslint . --max-warnings=0",
+    "preview": "wrangler dev --port 8787",
+    "deploy": "npm run build && wrangler deploy",
+    "check:deploy": "wrangler deploy --dry-run"
   },
   "dependencies": {
     "lucide-react": "^1.62.0",
@@ -23,7 +25,8 @@
     "eslint": "^9.39.5",
     "eslint-config-next": "^15.5.28",
     "tailwindcss": "^4.3.2",
-    "typescript": "^5.8.0"
+    "typescript": "^5.8.0",
+    "wrangler": "^4.157.0"
   },
   "overrides": {
     "postcss": "^8.5.10"

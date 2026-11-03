@@ -68,7 +68,7 @@ export function Nav({ release, stars }: { release: Release; stars: number | null
     <header className="sticky top-0 z-50 border-b border-edge/70 bg-bg/85 backdrop-blur">
       <nav aria-label="Primary" className="mx-auto flex max-w-6xl items-center gap-3 px-6 py-3">
         <Link href="/#top" className={`flex items-center gap-2.5 rounded-lg ${FOCUS}`}>
-          <Image src="/scribe-icon.png" alt="" width={28} height={28} />
+          <Image src="/scribe-icon-64.png" alt="" width={28} height={28} />
           <span className="font-bold leading-none tracking-tight">Scribe</span>
         </Link>
         <span aria-hidden="true" className="hidden h-5 w-px bg-edge sm:block" />
@@ -225,7 +225,7 @@ export function Footer({ release }: { release: Release }) {
       <div className="mx-auto grid max-w-6xl grid-cols-2 gap-x-6 gap-y-10 px-6 py-14 md:grid-cols-[minmax(0,1.2fr)_repeat(3,minmax(0,1fr))]">
         <div className="col-span-2 md:col-span-1">
           <Link href="/#top" className={`flex w-fit items-center gap-2.5 rounded-lg ${FOCUS}`}>
-            <Image src="/scribe-icon.png" alt="" width={28} height={28} />
+            <Image src="/scribe-icon-64.png" alt="" width={28} height={28} />
             <span className="font-bold tracking-tight text-ink">Scribe</span>
           </Link>
           <p className="mt-3 max-w-xs text-sm text-mute">Free speech-to-text for Windows.</p>

@@ -24,12 +24,12 @@ Run the same checks required by continuous integration:
 ```bash
 npm run lint
 npm run build
+npm run check:deploy
 ```
 
 Dependabot checks the npm and GitHub Actions dependencies weekly.
 
 ## Deployment
 
-The production site is hosted on Vercel and uses `scribe.n8builds.dev` as its canonical domain.
-
-Production deployments should be created from the repository's default branch after its checks pass.
+The site is a static export served by Cloudflare Workers static assets.
+Pushes to `main` deploy automatically; see [DEPLOY.md](DEPLOY.md) for setup, manual deploys and rollback.
