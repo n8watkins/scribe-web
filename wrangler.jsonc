@@ -13,6 +13,9 @@
     "binding": "ASSETS",
     "run_worker_first": ["/videos/*"]
   },
+  // Workers Logs keeps every invocation of the script (the /videos/* requests);
+  // assets served without the script produce no log entries.
+  "observability": { "enabled": true, "head_sampling_rate": 1 },
   "workers_dev": false,
   "preview_urls": false,
   "routes": [{ "pattern": "scribe.n8builds.dev", "custom_domain": true }]

@@ -26,6 +26,15 @@ Run `npm run lint`, then `npm run deploy`.
 `npm run deploy` runs `next build` (writes `out/`) and then `wrangler deploy`, which uploads only changed assets.
 To check the build locally first, run `npm run build && npm run preview` and open http://localhost:8787.
 
+## Reading the logs
+
+Workers Logs is on (`observability` in `wrangler.jsonc`, every request kept).
+In the Cloudflare dashboard, open Workers & Pages, then the `scribe-web` Worker, then Logs.
+To stream them live, run `npx wrangler tail scribe-web --format pretty`.
+`--search` matches log messages only, not request URLs, so use `--status error` or no filter to see requests.
+Only requests that run the script appear, which means `/videos/*`; pages and other assets are served without invoking it, so they produce no log entries.
+For traffic to those, use the Worker's Metrics tab instead.
+
 ## Roll back
 
 Run `npx wrangler deployments list` to see recent deployments, or `npx wrangler versions list` to see versions.
