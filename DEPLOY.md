@@ -1,7 +1,8 @@
 # Deploying the Scribe website
 
 The site is a fully static Next.js export (`output: "export"`) served by Cloudflare Workers static assets, with no server routes.
-The `scribe-web` Worker in the owner's Cloudflare account (`wrangler.jsonc`) serves `out/` at https://scribe-web.nathancwatkins23.workers.dev.
+The `scribe-web` Worker in the owner's Cloudflare account (`wrangler.jsonc`) serves `out/` at https://scribe.n8builds.dev.
+The hostname is attached as a Workers custom domain, so Cloudflare creates and manages its DNS record itself; the `workers.dev` address is turned off.
 
 The only script, `worker/index.js`, runs for `/videos/*` alone and answers byte-range requests with `206 Partial Content`, because static assets always send the whole file and Safari plays a video only when ranges work.
 Every other request is served straight from the assets.

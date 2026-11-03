@@ -13,6 +13,7 @@
     "binding": "ASSETS",
     "run_worker_first": ["/videos/*"]
   },
-  "workers_dev": true,
-  "preview_urls": false
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [{ "pattern": "scribe.n8builds.dev", "custom_domain": true }]
 }
