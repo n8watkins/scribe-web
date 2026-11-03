@@ -8,6 +8,8 @@ node_modules
 # Local tooling
 *.tsbuildinfo
 .vercel/
+.wrangler/
+.dev.vars*
 
 # Environment files
 .env*
