@@ -1,7 +1,10 @@
 # Deploying the Scribe website
 
-The site is a fully static Next.js export (`output: "export"`) served by Cloudflare Workers static assets, with no server routes and no Worker script.
+The site is a fully static Next.js export (`output: "export"`) served by Cloudflare Workers static assets, with no server routes.
 The `scribe-web` Worker in the owner's Cloudflare account (`wrangler.jsonc`) serves `out/` at https://scribe-web.nathancwatkins23.workers.dev.
+
+The only script, `worker/index.js`, runs for `/videos/*` alone and answers byte-range requests with `206 Partial Content`, because static assets always send the whole file and Safari plays a video only when ranges work.
+Every other request is served straight from the assets.
 
 Security and cache headers live in `public/_headers`, because a static export has no server to send them.
 There is no runtime image optimizer, so images ship as committed; add small copies (like `public/scribe-icon-64.png`) instead of shrinking large files in the browser.

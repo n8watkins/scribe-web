@@ -1,13 +1,17 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  // Static assets only: no Worker script runs, requests are served straight from out/.
+  // Requests are served straight from out/. The one script, worker/index.js,
+  // runs only for /videos/* to answer byte-range requests, which Safari needs.
   "name": "scribe-web",
   "account_id": "b2c564cf83cb9184dd6d7cc4ff8b38bf",
   "compatibility_date": "2026-11-01",
+  "main": "worker/index.js",
   "assets": {
     "directory": "./out",
     "html_handling": "auto-trailing-slash",
-    "not_found_handling": "404-page"
+    "not_found_handling": "404-page",
+    "binding": "ASSETS",
+    "run_worker_first": ["/videos/*"]
   },
   "workers_dev": true,
   "preview_urls": false
