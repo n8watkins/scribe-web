@@ -265,7 +265,7 @@ export function Footer({ release }: { release: Release }) {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-6 py-6 text-sm text-faint sm:flex-row">
           <p>© 2026 Nathan Watkins. Scribe is MIT licensed.</p>
           <p className="text-center">
-            This site sets no cookies and runs no analytics.{" "}
+            This site sets no cookies and counts visits without tracking you.{" "}
             <Link href="/privacy" className="text-mute underline decoration-faint/50 underline-offset-2 hover:text-ink">
               Privacy policy
             </Link>

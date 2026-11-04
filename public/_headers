@@ -1,8 +1,10 @@
 # Served by Cloudflare Workers static assets (see DEPLOY.md).
 # The App Router emits inline bootstrap scripts for statically generated pages,
 # so script-src must permit those scripts. Everything a page loads is self-hosted.
-# no-transform keeps Cloudflare from injecting scripts (such as the Web
-# Analytics beacon) into pages, which the CSP would block anyway.
+# no-transform keeps Cloudflare from injecting scripts into pages. The Web
+# Analytics beacon is in the page itself (components/WebAnalytics.tsx), and the
+# CSP allows it, its report endpoint and Sentry's ingest host
+# (lib/error-reporting.ts).
 /*
   Cache-Control: public, max-age=0, must-revalidate, no-transform
   Strict-Transport-Security: max-age=63072000; includeSubDomains
@@ -16,7 +18,7 @@
   Origin-Agent-Cluster: ?1
   X-Permitted-Cross-Domain-Policies: none
   Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), browsing-topics=()
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; script-src-attr 'none'; style-src 'self'; style-src-attr 'unsafe-inline'; img-src 'self'; media-src 'self'; font-src 'self'; connect-src 'self'; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; script-src-attr 'none'; style-src 'self'; style-src-attr 'unsafe-inline'; img-src 'self'; media-src 'self'; font-src 'self'; connect-src 'self' https://cloudflareinsights.com https://o4507767562371072.ingest.us.sentry.io; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests
 
 # Hashed build output never changes, so browsers may cache it for a year.
 /_next/static/*
