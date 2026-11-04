@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { WebAnalytics } from "@/components/WebAnalytics";
 import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -33,7 +32,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={inter.variable}>
       <body className="min-h-screen antialiased">
         {children}
-        <WebAnalytics />
       </body>
     </html>
   );
