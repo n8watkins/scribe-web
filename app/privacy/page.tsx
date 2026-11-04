@@ -5,11 +5,11 @@ import { getRelease, getStarCount, GITHUB_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Privacy policy - Scribe",
-  description: "What scribe.n8builds.dev collects (nothing of its own) and how the Scribe app handles your data.",
+  description: "What scribe.n8builds.dev collects (page counts without cookies, and error reports) and how the Scribe app handles your data.",
   alternates: { canonical: "/privacy" },
 };
 
-const UPDATED = "October 27, 2026";
+const UPDATED = "November 4, 2026";
 
 // The site's privacy policy, and a pointer to the app's own data handling
 // (the home page's "Private by design" section has the full detail).
@@ -32,15 +32,16 @@ export default async function PrivacyPage() {
                 to click through.
               </li>
               <li>
-                <span className="text-ink">No analytics or trackers.</span> No Google Analytics, no pixels, no
-                fingerprinting, and nothing stored in your browser.
+                <span className="text-ink">Page counts, not tracking.</span> Cloudflare Web Analytics counts page
+                visits and load times. It sets no cookies, stores nothing in your browser and keeps no visitor ID.
+                No Google Analytics, no pixels, no fingerprinting.
               </li>
               <li>
-                <span className="text-ink">No third parties.</span> Every file the page loads, fonts and videos
-                included, comes from this site itself.
+                <span className="text-ink">Error reports.</span> If the page breaks, a report goes to Sentry: the
+                error and the page it happened on, nothing about you.
               </li>
               <li>
-                <span className="text-ink">Hosting.</span> The site is served by Vercel, which handles standard request
+                <span className="text-ink">Hosting.</span> The site is served by Cloudflare, which handles standard request
                 data (such as your IP address and browser) to deliver the page and protect it from abuse. I don&apos;t
                 use that data to identify or follow you.
               </li>
