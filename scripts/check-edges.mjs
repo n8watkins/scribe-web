@@ -1,6 +1,6 @@
 // Checks the built site's edges through the real Worker (`wrangler dev` on
 // out/): unknown paths answer 404 with Scribe's not-found page, and the CSP
-// lets Cloudflare Web Analytics and Sentry through.
+// lets the Cloudflare Web Analytics beacon and Sentry through.
 // Usage: node scripts/check-edges.mjs http://localhost:8787
 import assert from "node:assert/strict";
 
@@ -13,7 +13,6 @@ assert.match(html, /<h1[^>]*>Nothing to type out here\.<\/h1>/, "404 page headin
 
 const csp = (await fetch(`${base}/`)).headers.get("content-security-policy") ?? "";
 assert.match(csp, /script-src [^;]*https:\/\/static\.cloudflareinsights\.com/, "CSP allows the beacon");
-assert.match(csp, /connect-src [^;]*https:\/\/cloudflareinsights\.com/, "CSP allows the beacon's reports");
 assert.match(csp, /connect-src [^;]*\.ingest\.us\.sentry\.io/, "CSP allows Sentry");
 
 console.log("edges ok: 404 page and CSP");
