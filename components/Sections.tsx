@@ -4,11 +4,13 @@ import {
   FAQS,
   GITHUB_PROFILE_URL,
   GITHUB_URL,
+  INSTALL_GUIDES_URL,
   KOFI_URL,
   N8BUILDS_URL,
   type Release,
 } from "@/lib/site";
-import { DownloadIcon, GitHubIcon, KofiIcon, StarIcon } from "@/components/Icons";
+import { GitHubIcon, KofiIcon, StarIcon } from "@/components/Icons";
+import { DownloadButton, NavDownload, OtherSystems } from "@/components/Download";
 import { EditorDemo } from "@/components/EditorDemo";
 import { Steps } from "@/components/Steps";
 import { Faq } from "@/components/Faq";
@@ -88,13 +90,7 @@ export function Nav({ release, stars }: { release: Release; stars: number | null
           <span className="hidden sm:block">
             <StarButton stars={stars} />
           </span>
-          <a
-            href={release.url}
-            className={`inline-flex h-9 items-center gap-1.5 rounded-full bg-gradient-to-r from-cyan to-purple px-4 text-sm font-semibold text-bg transition hover:brightness-110 ${FOCUS}`}
-          >
-            <DownloadIcon className="h-4 w-4" />
-            Download
-          </a>
+          <NavDownload release={release} />
         </div>
       </nav>
     </header>
@@ -145,24 +141,25 @@ export function CTA({ release }: { release: Release }) {
         <h2 className="text-balance text-3xl font-bold tracking-tight sm:text-4xl">
           Give it a try. <span className="gradient-text">It&apos;s free.</span>
         </h2>
-        <p className="mx-auto mt-3 max-w-md text-mute">I use it every day. I hope you like it too.</p>
+        <p className="mx-auto mt-3 max-w-md text-balance text-mute">I use it every day. I hope you like it too.</p>
         <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <a href={release.url} className={`inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-cyan to-purple px-7 py-3.5 font-semibold text-bg transition hover:brightness-110 ${FOCUS}`}>
-            <DownloadIcon />
-            <span>
-              Download v{release.version}
-              <span className="hidden sm:inline"> for Windows</span>
-            </span>
-          </a>
+          <DownloadButton release={release} className="shadow-none" />
           <KofiButton className="h-[3.25rem] px-6 text-base" />
         </div>
-        <p className="mx-auto mt-5 max-w-lg text-sm text-faint">
-          {release.sizeMb} MB. Windows may warn you because the installer isn&apos;t code-signed yet; you can check it against the{" "}
-          <a href={release.checksumsUrl} className="underline decoration-faint/50 underline-offset-2 transition hover:text-ink">
-            published checksums
-          </a>
-          .
-        </p>
+        <div className="mx-auto mt-5 max-w-lg text-sm text-faint">
+          <p>
+            Version {release.version}. Every download can be checked against the{" "}
+            <a href={release.checksumsUrl} className="underline decoration-faint/50 underline-offset-2 transition hover:text-ink">
+              published checksums
+            </a>
+            , and the{" "}
+            <a href={INSTALL_GUIDES_URL} className="underline decoration-faint/50 underline-offset-2 transition hover:text-ink">
+              install guides
+            </a>{" "}
+            cover the first open on each system.
+          </p>
+          <OtherSystems release={release} />
+        </div>
       </div>
     </section>
   );
@@ -185,8 +182,11 @@ export function Footer({ release }: { release: Release }) {
     {
       title: "Get it",
       links: [
-        { label: `Download v${release.version}`, href: release.url },
-        { label: "All releases", href: `${GITHUB_URL}/releases` },
+        { label: "Windows", href: release.downloads.windows.href },
+        { label: "macOS (beta)", href: release.downloads.mac.href },
+        { label: "Linux (beta)", href: release.downloads.linux.href },
+        { label: "Install guides", href: INSTALL_GUIDES_URL },
+        { label: `All releases (v${release.version})`, href: `${GITHUB_URL}/releases` },
         { label: "Checksums", href: release.checksumsUrl },
         { label: "Source code", href: GITHUB_URL },
       ],
@@ -228,7 +228,7 @@ export function Footer({ release }: { release: Release }) {
             <Image src="/scribe-icon-64.png" alt="" width={28} height={28} />
             <span className="font-bold tracking-tight text-ink">Scribe</span>
           </Link>
-          <p className="mt-3 max-w-xs text-sm text-mute">Free speech-to-text for Windows.</p>
+          <p className="mt-3 max-w-xs text-sm text-mute">Free speech-to-text for Windows, Mac and Linux.</p>
           <div className="mt-4 flex items-center gap-2">
             <KofiButton />
             <a

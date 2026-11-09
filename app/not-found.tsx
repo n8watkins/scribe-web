@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { DownloadIcon } from "@/components/Icons";
+import { DownloadButton } from "@/components/Download";
 import { Footer, Nav } from "@/components/Sections";
 import { getRelease, getStarCount } from "@/lib/site";
 
@@ -25,13 +25,7 @@ export default async function NotFound() {
           This page doesn&apos;t exist. Everything about Scribe is on the home page, and the download is one click away.
         </p>
         <div className="mt-9 flex w-full max-w-xs flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row">
-          <a
-            href={release.url}
-            className={`inline-flex items-center justify-center gap-2.5 whitespace-nowrap rounded-full bg-gradient-to-r from-cyan to-purple px-7 py-3.5 font-semibold text-bg shadow-lg shadow-cyan/20 transition hover:brightness-110 ${FOCUS}`}
-          >
-            <DownloadIcon />
-            Download for Windows
-          </a>
+          <DownloadButton release={release} />
           <Link
             href="/"
             className={`inline-flex items-center justify-center whitespace-nowrap rounded-full border border-edge-strong bg-card px-6 py-3.5 font-semibold text-ink transition hover:border-cyan/60 ${FOCUS}`}

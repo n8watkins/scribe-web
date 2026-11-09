@@ -1,6 +1,6 @@
 # Scribe website
 
-This repository contains the public website for [Scribe](https://github.com/n8watkins/scribe), a private local dictation app for Windows.
+This repository contains the public website for [Scribe](https://github.com/n8watkins/scribe), a private local dictation app for Windows, with macOS and Linux in beta.
 
 The production site is available at [scribe.n8builds.dev](https://scribe.n8builds.dev).
 
