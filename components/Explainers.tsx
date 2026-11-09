@@ -365,7 +365,7 @@ const ALSO: { Icon: LucideIcon; text: string }[] = [
   { Icon: Combine, text: "Combine entries, or open one in your editor" },
   { Icon: CalendarClock, text: "Keep history 30 days, forever, or not at all" },
   { Icon: FolderGit2, text: "Back up to a private GitHub repo, or export Markdown, CSV or JSON" },
-  { Icon: Power, text: "Lives in the tray, starts with Windows" },
+  { Icon: Power, text: "Lives in the tray, starts when you sign in" },
 ];
 
 export function More() {

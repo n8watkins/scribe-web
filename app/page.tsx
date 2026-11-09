@@ -12,7 +12,7 @@ export default async function Home() {
     "@type": "SoftwareApplication",
     name: "Scribe",
     applicationCategory: "UtilitiesApplication",
-    operatingSystem: "Windows 10, Windows 11",
+    operatingSystem: "Windows 10, Windows 11, macOS 13.3, Linux",
     softwareVersion: release.version,
     downloadUrl: release.url,
     url: SITE_URL,

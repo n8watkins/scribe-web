@@ -6,10 +6,10 @@ import "./globals.css";
 // Self-hosted at build time (next/font), so the CSP's font-src 'self' holds.
 const inter = Inter({ subsets: ["latin"], display: "swap", variable: "--font-inter" });
 
-const TITLE = "Scribe - Free speech-to-text for Windows";
+const TITLE = "Scribe - Free speech-to-text for Windows, Mac and Linux";
 const DESC =
-  "Hold Ctrl + Win, talk, and let go: Scribe types what you said into any app. " +
-  "It runs on your PC, so your voice never leaves it. Free and open source.";
+  "Hold a hotkey, talk, and let go: Scribe types what you said into any app. " +
+  "It runs on your computer, so your voice never leaves it. Free and open source, for Windows, with macOS and Linux in beta.";
 
 export const metadata: Metadata = {
   title: TITLE,
