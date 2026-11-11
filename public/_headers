@@ -19,6 +19,12 @@
   Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), browsing-topics=()
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; script-src-attr 'none'; style-src 'self'; style-src-attr 'unsafe-inline'; img-src 'self'; media-src 'self'; font-src 'self'; connect-src 'self' https://o4507767562371072.ingest.us.sentry.io; object-src 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests
 
+# Uptime check (OpenPing): a static file, so it costs no Worker run.
+/healthz
+  ! Cache-Control
+  Cache-Control: no-store
+  Content-Type: text/plain; charset=utf-8
+
 # Hashed build output never changes, so browsers may cache it for a year.
 /_next/static/*
   ! Cache-Control
