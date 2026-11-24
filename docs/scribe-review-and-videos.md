@@ -5,7 +5,7 @@ This note is the starting point for that session.
 
 ## 1. How Scribe is built
 
-- The app lives in `~/projects/tools/scribe/scribe-app` (Tauri 2: a React front end in `app/src`, Rust in `app/src-tauri/src`).
+- The app lives in `~/projects/desktop/scribe/scribe-app` (Tauri 2: a React front end in `app/src`, Rust in `app/src-tauri/src`).
 - Speech runs through a bundled whisper.cpp server (`whisper_server.rs`), with models from `models.rs` (Tiny to Large v3 Turbo, English and multilingual, default Small English Q5_1).
 - Worth reviewing end to end:
   - every feature as a user sees it, against what the landing page says (round 4 added a full feature list from the source);
